@@ -1,4 +1,4 @@
-# IndigoBook CSL-M Support (Zotero 8) — v0.2.0
+# IndigoBook-Phoenix (Zotero 8) — v0.2.0
 
 This build bundles the US IndigoTemp jurisdiction modules and implements **dynamic module loading** via
 `sys.loadJurisdictionStyle(jurisdiction, variantName)` so that multiple US jurisdictions can appear in a single document.

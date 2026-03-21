@@ -1,6 +1,6 @@
 param(
     [string]$SourceDir = $PSScriptRoot,
-    [string]$OutputBaseName = (Split-Path -Leaf $PSScriptRoot)
+    [string]$OutputBaseName = ""
 )
 
 Set-StrictMode -Version Latest
@@ -17,6 +17,35 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 Add-Type -AssemblyName System.IO.Compression
 
 $sourcePath = (Resolve-Path -Path $SourceDir).Path
+
+if ([string]::IsNullOrWhiteSpace($OutputBaseName)) {
+    $manifestPath = Join-Path -Path $sourcePath -ChildPath 'manifest.json'
+    if (Test-Path -Path $manifestPath) {
+        try {
+            $manifest = Get-Content -Path $manifestPath -Raw | ConvertFrom-Json
+            $manifestName = [string]($manifest.name)
+            $manifestVersion = [string]($manifest.version)
+
+            $slug = $manifestName.ToLowerInvariant() -replace '[^a-z0-9]+', '-'
+            $slug = $slug.Trim('-')
+
+            if (-not [string]::IsNullOrWhiteSpace($slug) -and -not [string]::IsNullOrWhiteSpace($manifestVersion)) {
+                $OutputBaseName = "$slug-$manifestVersion"
+            }
+            elseif (-not [string]::IsNullOrWhiteSpace($slug)) {
+                $OutputBaseName = $slug
+            }
+        }
+        catch {
+            # Fall back to folder name if manifest parsing fails.
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($OutputBaseName)) {
+        $OutputBaseName = Split-Path -Leaf $sourcePath
+    }
+}
+
 $zipPath = Join-Path -Path $sourcePath -ChildPath ("{0}.zip" -f $OutputBaseName)
 $xpiPath = Join-Path -Path $sourcePath -ChildPath ("{0}.xpi" -f $OutputBaseName)
 
