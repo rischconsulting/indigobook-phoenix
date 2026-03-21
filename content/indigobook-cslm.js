@@ -76,6 +76,29 @@ var IndigoBookCSLM = (() => {
         return null;
       }
     }
+    static updateMLZExtraField(itemOrExtra, fieldName, fieldValue) {
+      const extra = typeof itemOrExtra === "string" ? itemOrExtra : itemOrExtra?.getField?.("extra") || itemOrExtra?.extra || "";
+      const field = (fieldName || "").toString().trim();
+      if (!field) return extra;
+      const parsed = this._getMLZPayloadAndRange(extra);
+      if (!parsed.payload && (fieldValue == null || String(fieldValue).trim() === "")) {
+        return extra;
+      }
+      const payload = parsed.payload || {};
+      if (!payload.extrafields || typeof payload.extrafields !== "object" || Array.isArray(payload.extrafields)) {
+        payload.extrafields = {};
+      }
+      const value = fieldValue == null ? "" : String(fieldValue).trim();
+      if (value) payload.extrafields[field] = value;
+      else delete payload.extrafields[field];
+      const mlzBlock = `mlzsync1:${JSON.stringify(payload)}`;
+      if (parsed.start != null && parsed.end != null) {
+        return `${extra.slice(0, parsed.start)}${mlzBlock}${extra.slice(parsed.end)}`;
+      }
+      const base = String(extra || "").trimEnd();
+      return base ? `${base}
+${mlzBlock}` : mlzBlock;
+    }
     static _fromMLZ(extra) {
       const fields = this.getMLZExtraFields(extra);
       const j = fields?.jurisdiction;
@@ -118,6 +141,54 @@ var IndigoBookCSLM = (() => {
         }
       }
       return null;
+    }
+    static _getMLZPayloadAndRange(extra) {
+      const source = String(extra || "");
+      const marker = "mlzsync1:";
+      const markerIndex = source.indexOf(marker);
+      if (markerIndex === -1) {
+        return { payload: null, start: null, end: null };
+      }
+      const braceStart = source.indexOf("{", markerIndex);
+      if (braceStart === -1) {
+        return { payload: null, start: null, end: null };
+      }
+      let depth = 0;
+      let inString = false;
+      let escaping = false;
+      for (let i = braceStart; i < source.length; i += 1) {
+        const ch = source[i];
+        if (inString) {
+          if (escaping) escaping = false;
+          else if (ch === "\\") escaping = true;
+          else if (ch === '"') inString = false;
+          continue;
+        }
+        if (ch === '"') {
+          inString = true;
+          continue;
+        }
+        if (ch === "{") {
+          depth += 1;
+          continue;
+        }
+        if (ch === "}") {
+          depth -= 1;
+          if (depth === 0) {
+            const jsonText = source.slice(braceStart, i + 1);
+            try {
+              return {
+                payload: JSON.parse(jsonText),
+                start: markerIndex,
+                end: i + 1
+              };
+            } catch (e) {
+              return { payload: null, start: markerIndex, end: i + 1 };
+            }
+          }
+        }
+      }
+      return { payload: null, start: markerIndex, end: source.length };
     }
     static _decodeLengthPrefixedJurisdiction(s) {
       if (!s || s.length < 4) return null;
@@ -675,14 +746,23 @@ var IndigoBookCSLM = (() => {
       this._maxShortFormLogs = 40;
       this._fieldLogCount = 0;
       this._maxFieldLogs = 40;
+      this._itemObserverID = null;
+      this._itemPanePatchTimer = null;
+      this._itemPanePatchAttempts = 0;
+      this._maxItemPanePatchAttempts = 20;
+      this._syncInFlight = /* @__PURE__ */ new Set();
     }
     patch() {
       this._patchRetrieveItem();
       this._patchAbbreviations();
       this._patchLoadJurisdictionStyle();
       this._patchGetCiteProcFallback();
+      this._registerCaseReporterSync();
+      this._patchItemPaneRender();
     }
     unpatch() {
+      this._unregisterCaseReporterSync();
+      this._unpatchItemPaneRender();
       const sysProto = Zotero?.Cite?.System?.prototype;
       if (sysProto) {
         if (this._orig.retrieveItem) sysProto.retrieveItem = this._orig.retrieveItem;
@@ -692,6 +772,168 @@ var IndigoBookCSLM = (() => {
         if (this._orig.retrieveStyleModule) sysProto.retrieveStyleModule = this._orig.retrieveStyleModule;
       }
       if (this._orig.getCiteProc) Zotero.Style.prototype.getCiteProc = this._orig.getCiteProc;
+    }
+    _registerCaseReporterSync() {
+      if (!Zotero?.Notifier?.registerObserver) return;
+      if (this._itemObserverID) return;
+      const self = this;
+      this._itemObserverID = Zotero.Notifier.registerObserver({
+        async notify(event, type, ids) {
+          try {
+            Zotero.debug(`[IndigoBook CSL-M] case reporter sync notifier: event=${String(event)} type=${String(type)} ids=${Array.isArray(ids) ? ids.length : 0}`);
+          } catch (e) {
+          }
+          const isSyncEvent = ["add", "modify", "refresh", "redraw", "select"].includes(event);
+          if (!isSyncEvent) return;
+          if (type === "item" && Array.isArray(ids) && ids.length) {
+            for (const id of ids) {
+              await self._syncCaseReporterFromFieldsAndMLZ(id);
+            }
+            return;
+          }
+          await self._syncCaseReporterFromActiveSelection();
+        }
+      }, ["item", "itempane", "tab"], "indigobook-cslm-case-reporter-sync");
+    }
+    _patchItemPaneRender() {
+      if (this._orig.itemDetailsRender && this._orig.itemDetailsOwner) return;
+      const itemDetails = this._getActiveItemDetails();
+      if (!itemDetails?.render) {
+        this._scheduleItemPaneRenderPatch();
+        return;
+      }
+      const self = this;
+      this._orig.itemDetailsOwner = itemDetails;
+      this._orig.itemDetailsRender = itemDetails.render;
+      itemDetails.render = async function(...args) {
+        try {
+          const itemID = this.item?.id;
+          if (itemID != null) {
+            try {
+              Zotero.debug(`[IndigoBook CSL-M] case reporter item-pane render sync: item=${String(itemID)}`);
+            } catch (e) {
+            }
+            await self._syncCaseReporterFromFieldsAndMLZ(itemID);
+          }
+        } catch (e) {
+          try {
+            Zotero.debug(`[IndigoBook CSL-M] case reporter item-pane render sync failed: ${String(e)}`);
+          } catch (_) {
+          }
+        }
+        return self._orig.itemDetailsRender.apply(this, args);
+      };
+    }
+    _scheduleItemPaneRenderPatch() {
+      if (this._orig.itemDetailsRender && this._orig.itemDetailsOwner) return;
+      if (this._itemPanePatchAttempts >= this._maxItemPanePatchAttempts) return;
+      if (this._itemPanePatchTimer) return;
+      this._itemPanePatchAttempts += 1;
+      this._itemPanePatchTimer = setTimeout(() => {
+        this._itemPanePatchTimer = null;
+        this._patchItemPaneRender();
+      }, 500);
+    }
+    _unpatchItemPaneRender() {
+      try {
+        if (this._itemPanePatchTimer) {
+          clearTimeout(this._itemPanePatchTimer);
+          this._itemPanePatchTimer = null;
+        }
+        if (this._orig.itemDetailsOwner && this._orig.itemDetailsRender) {
+          this._orig.itemDetailsOwner.render = this._orig.itemDetailsRender;
+        }
+      } catch (e) {
+      } finally {
+        delete this._orig.itemDetailsOwner;
+        delete this._orig.itemDetailsRender;
+      }
+    }
+    _unregisterCaseReporterSync() {
+      try {
+        if (this._itemObserverID && Zotero?.Notifier?.unregisterObserver) {
+          Zotero.Notifier.unregisterObserver(this._itemObserverID);
+        }
+      } catch (e) {
+      } finally {
+        this._itemObserverID = null;
+        this._syncInFlight.clear();
+      }
+    }
+    async _syncCaseReporterFromFieldsAndMLZ(itemID) {
+      const normalizedID = String(itemID);
+      if (this._syncInFlight.has(normalizedID)) return;
+      this._syncInFlight.add(normalizedID);
+      try {
+        const item = this._getZoteroItemByAnyID(itemID);
+        if (!item || item.deleted) return;
+        const itemTypeName = Zotero?.ItemTypes?.getName?.(item.itemTypeID);
+        if (itemTypeName !== "case") return;
+        const reporter = String(item.getField?.("reporter") || "").trim();
+        const extra = String(item.getField?.("extra") || "");
+        const mlzFields = this.Jurisdiction.getMLZExtraFields?.(extra) || null;
+        const mlzReporter = String(mlzFields?.reporter || "").trim();
+        if (reporter && reporter !== mlzReporter) {
+          const updatedExtra = this.Jurisdiction.updateMLZExtraField?.(extra, "reporter", reporter) || extra;
+          if (updatedExtra !== extra) {
+            item.setField("extra", updatedExtra);
+            await item.saveTx({ skipDateModifiedUpdate: true });
+            try {
+              Zotero.debug(`[IndigoBook CSL-M] case reporter sync: wrote mlz reporter from Zotero field (item ${normalizedID})`);
+            } catch (e) {
+            }
+          }
+          return;
+        }
+        if (!reporter && mlzReporter) {
+          item.setField("reporter", mlzReporter);
+          await item.saveTx({ skipDateModifiedUpdate: true });
+          try {
+            Zotero.debug(`[IndigoBook CSL-M] case reporter sync: backfilled Zotero reporter from mlz (item ${normalizedID})`);
+          } catch (e) {
+          }
+        }
+      } catch (e) {
+        try {
+          Zotero.logError(e);
+        } catch (_) {
+        }
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] case reporter sync failed for item ${normalizedID}: ${String(e)}`);
+        } catch (_) {
+        }
+      } finally {
+        this._syncInFlight.delete(normalizedID);
+      }
+    }
+    async _syncCaseReporterFromActiveSelection() {
+      try {
+        const pane = Zotero.getActiveZoteroPane?.();
+        if (!pane?.getSelectedItems) return;
+        const selected = pane.getSelectedItems();
+        if (!Array.isArray(selected) || !selected.length) return;
+        for (const entry of selected) {
+          const id = typeof entry === "number" || typeof entry === "string" ? entry : entry?.id;
+          if (id == null) continue;
+          await this._syncCaseReporterFromFieldsAndMLZ(id);
+        }
+      } catch (e) {
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] case reporter selection sync failed: ${String(e)}`);
+        } catch (_) {
+        }
+      }
+    }
+    _getActiveItemDetails() {
+      try {
+        const mainWindow = Zotero.getMainWindow?.();
+        const fromMainWindow = mainWindow?.ZoteroPane?.itemPane?._itemDetails;
+        if (fromMainWindow) return fromMainWindow;
+        const activePane = Zotero.getActiveZoteroPane?.();
+        return activePane?.itemPane?._itemDetails || null;
+      } catch (e) {
+      }
+      return null;
     }
     _patchRetrieveItem() {
       const sysProto = Zotero?.Cite?.System?.prototype;
