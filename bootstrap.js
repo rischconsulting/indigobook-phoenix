@@ -1,4 +1,4 @@
-var Services = ChromeUtils.importESModule("resource://gre/modules/Services.sys.mjs").Services;
+// Services is available as a global in the Zotero extension bootstrap context.
 
 function logError(prefix, e) {
   try { Zotero.logError(e); } catch (_) {}
