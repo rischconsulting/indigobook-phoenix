@@ -221,12 +221,15 @@ var IndigoBookCSLM = (() => {
       this._primaryUS = null;
       this._secondaryUS = null;
       this._primaryJur = null;
+      this._userSecondaryOverrides = {};
+      this._secondaryOverridesPref = "extensions.indigobook-cslm.secondaryContainerTitleOverrides";
     }
     async preload() {
       this._autoUS = await this.dataStore.loadJSON("data/auto-us.json");
       this._primaryUS = await this.dataStore.loadJSON("data/primary-us.json");
       this._secondaryUS = await this.dataStore.loadJSON("data/secondary-us-bluebook.json");
       this._primaryJur = await this.dataStore.loadJSON("data/primary-jurisdictions.json");
+      this._userSecondaryOverrides = this._loadSecondaryOverrides();
     }
     normalizeKey(s) {
       return (s || "").toString().trim().toLowerCase().replace(/[“”]/g, '"').replace(/[’]/g, "'").replace(/[^a-z0-9\s\.-]/g, " ").replace(/\s+/g, " ").trim();
@@ -255,7 +258,7 @@ var IndigoBookCSLM = (() => {
       if (category === "container-title") {
         hit = lookupJurChainWithSource(this._primaryUS?.xdata, preferredJur === "default" ? "us" : preferredJur, "container-title", normalizedKey);
         if (hit?.value) return { jurisdiction: hit.jurisdiction || preferredJur, value: hit.value };
-        const secondaryValue = this._secondaryUS?.xdata?.default?.["container-title"]?.[normalizedKey] || null;
+        const secondaryValue = this._lookupSecondaryContainerTitle(normalizedKey);
         if (secondaryValue) return { jurisdiction: "default", value: secondaryValue };
         if (!noHints) {
           const fallback = this.abbreviateContainerTitleFallback(key, preferredJur);
@@ -357,10 +360,69 @@ var IndigoBookCSLM = (() => {
       for (const category of categories) {
         const primaryHit = lookupJurChainWithSource(this._primaryUS?.xdata, normalizedJur, category, normalized);
         if (primaryHit?.value) return primaryHit;
-        const secondaryValue = this._secondaryUS?.xdata?.default?.[category]?.[normalized] || this._secondaryUS?.xdata?.default?.["container-title"]?.[normalized] || null;
+        const secondaryValue = category === "container-title" ? this._lookupSecondaryContainerTitle(normalized) : this._secondaryUS?.xdata?.default?.[category]?.[normalized] || this._lookupSecondaryContainerTitle(normalized) || null;
         if (secondaryValue) return { jurisdiction: "default", value: secondaryValue };
       }
       return null;
+    }
+    listSecondaryContainerTitleAbbreviations() {
+      const base = this._secondaryUS?.xdata?.default?.["container-title"] || {};
+      const merged = { ...base, ...this._userSecondaryOverrides };
+      return Object.keys(merged).sort((a, b) => a.localeCompare(b)).map((key) => ({
+        key,
+        value: merged[key],
+        source: Object.prototype.hasOwnProperty.call(this._userSecondaryOverrides, key) ? "user" : "base"
+      }));
+    }
+    upsertSecondaryContainerTitleAbbreviation(rawKey, rawValue) {
+      const key = this.normalizeKey(rawKey);
+      const value = (rawValue || "").toString().trim();
+      if (!key || !value) return false;
+      this._userSecondaryOverrides[key] = value;
+      this._saveSecondaryOverrides();
+      return true;
+    }
+    removeSecondaryContainerTitleAbbreviation(rawKey) {
+      const key = this.normalizeKey(rawKey);
+      if (!key) return false;
+      if (!Object.prototype.hasOwnProperty.call(this._userSecondaryOverrides, key)) return false;
+      delete this._userSecondaryOverrides[key];
+      this._saveSecondaryOverrides();
+      return true;
+    }
+    resetSecondaryContainerTitleOverrides() {
+      this._userSecondaryOverrides = {};
+      this._saveSecondaryOverrides();
+    }
+    _lookupSecondaryContainerTitle(normalizedKey) {
+      if (!normalizedKey) return null;
+      if (Object.prototype.hasOwnProperty.call(this._userSecondaryOverrides, normalizedKey)) {
+        return this._userSecondaryOverrides[normalizedKey];
+      }
+      return this._secondaryUS?.xdata?.default?.["container-title"]?.[normalizedKey] || null;
+    }
+    _loadSecondaryOverrides() {
+      try {
+        const raw = Zotero?.Prefs?.get?.(this._secondaryOverridesPref);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+        const cleaned = {};
+        for (const [k, v] of Object.entries(parsed)) {
+          const key = this.normalizeKey(k);
+          const value = (v || "").toString().trim();
+          if (key && value) cleaned[key] = value;
+        }
+        return cleaned;
+      } catch (e) {
+        return {};
+      }
+    }
+    _saveSecondaryOverrides() {
+      try {
+        Zotero?.Prefs?.set?.(this._secondaryOverridesPref, JSON.stringify(this._userSecondaryOverrides || {}));
+      } catch (e) {
+      }
     }
     _lookupSupplementalWord(normalized) {
       const supplemental = {
@@ -900,6 +962,105 @@ var IndigoBookCSLM = (() => {
     }
   };
 
+  // lib/services/prefsUI.mjs
+  var PrefsUI = class {
+    constructor({ pluginID, rootURI }) {
+      this.pluginID = pluginID;
+      this.rootURI = rootURI;
+      this._paneID = null;
+      this._registerTimer = null;
+      this._registerAttempts = 0;
+      this._maxRegisterAttempts = 20;
+    }
+    async register() {
+      this._registerAttempts = 0;
+      await this._tryRegister();
+    }
+    async _tryRegister() {
+      try {
+        if (this._paneID) return;
+        if (!Zotero?.PreferencePanes?.register) {
+          this._scheduleRetry("PreferencePanes service not ready");
+          return;
+        }
+        const spec = this.rootURI?.spec || String(this.rootURI || "");
+        const base = spec.endsWith("/") ? spec : `${spec}/`;
+        const pane = await Zotero.PreferencePanes.register({
+          pluginID: this.pluginID,
+          src: `${base}content/prefs-abbrev.xhtml`,
+          scripts: [`${base}content/prefs-abbrev.js`],
+          stylesheets: [`${base}content/prefs-abbrev.css`],
+          label: "IndigoBook CSL-M",
+          image: `${base}content/ui/icon48.svg`
+        });
+        this._paneID = pane?.id || pane || null;
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] prefs pane registered: paneID=${String(this._paneID)}`);
+        } catch (_) {
+        }
+      } catch (e) {
+        try {
+          Zotero.logError(e);
+        } catch (_) {
+        }
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] prefs pane register failed: ${String(e)}`);
+        } catch (_) {
+        }
+        this._scheduleRetry(String(e));
+      }
+    }
+    _scheduleRetry(reason) {
+      if (this._registerAttempts >= this._maxRegisterAttempts) {
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] prefs pane registration gave up after ${this._registerAttempts} attempts: ${reason}`);
+        } catch (_) {
+        }
+        return;
+      }
+      this._registerAttempts += 1;
+      if (this._registerTimer) clearTimeout(this._registerTimer);
+      this._registerTimer = setTimeout(async () => {
+        this._registerTimer = null;
+        try {
+          await this._tryRegister();
+        } catch (e) {
+          try {
+            Zotero.logError(e);
+          } catch (_) {
+          }
+        }
+      }, 1e3);
+    }
+    unregister() {
+      try {
+        if (this._registerTimer) {
+          clearTimeout(this._registerTimer);
+          this._registerTimer = null;
+        }
+        if (!this._paneID) return;
+        if (Zotero?.PreferencePanes?.unregister) {
+          try {
+            Zotero.debug(`[IndigoBook CSL-M] prefs pane unregistering: paneID=${String(this._paneID)}`);
+          } catch (_) {
+          }
+          Zotero.PreferencePanes.unregister(this._paneID);
+          try {
+            Zotero.debug(`[IndigoBook CSL-M] prefs pane unregistered: paneID=${String(this._paneID)}`);
+          } catch (_) {
+          }
+        }
+      } catch (e) {
+        try {
+          Zotero.logError(e);
+        } catch (_) {
+        }
+      } finally {
+        this._paneID = null;
+      }
+    }
+  };
+
   // lib/main.mjs
   var _ctx;
   async function activate({ id, version, rootURI }) {
@@ -910,7 +1071,8 @@ var IndigoBookCSLM = (() => {
       data: new DataStore(rootURI),
       modules: null,
       abbrevs: null,
-      patcher: null
+      patcher: null,
+      prefsUI: null
     };
     await _ctx.data.init();
     _ctx.modules = new ModuleLoader({ rootURI, dataStore: _ctx.data });
@@ -923,10 +1085,35 @@ var IndigoBookCSLM = (() => {
       jurisdiction: Jurisdiction
     });
     _ctx.patcher.patch();
+    _ctx.prefsUI = new PrefsUI({
+      pluginID: id,
+      rootURI
+    });
+    await _ctx.prefsUI.register();
+    Zotero.IndigoBookCSLMBridge = {
+      listSecondaryAbbreviations() {
+        return _ctx?.abbrevs?.listSecondaryContainerTitleAbbreviations?.() || [];
+      },
+      upsertSecondaryAbbreviation(key, value) {
+        return !!_ctx?.abbrevs?.upsertSecondaryContainerTitleAbbreviation?.(key, value);
+      },
+      removeSecondaryAbbreviation(key) {
+        return !!_ctx?.abbrevs?.removeSecondaryContainerTitleAbbreviation?.(key);
+      },
+      resetSecondaryAbbreviations() {
+        _ctx?.abbrevs?.resetSecondaryContainerTitleOverrides?.();
+        return true;
+      }
+    };
     Zotero.debug(`[IndigoBook CSL-M] activated v${version}`);
   }
   async function deactivate() {
     try {
+      try {
+        delete Zotero.IndigoBookCSLMBridge;
+      } catch (e) {
+      }
+      _ctx?.prefsUI?.unregister?.();
       _ctx?.patcher?.unpatch();
     } finally {
       _ctx = null;

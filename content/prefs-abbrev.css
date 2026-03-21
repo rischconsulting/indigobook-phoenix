@@ -1,0 +1,68 @@
+.ibcslm-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ibcslm-row input {
+  flex: 1;
+  min-width: 160px;
+}
+
+#ibcslm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#ibcslm-table th,
+#ibcslm-table td {
+  border-bottom: 1px solid #d0d0d0;
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#ibcslm-table tbody tr:hover {
+  background: #f3f7ff;
+}
+
+.ibcslm-key {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.ibcslm-source {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.ibcslm-inline-value {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  text-align: left;
+  cursor: text;
+}
+
+.ibcslm-inline-value:hover,
+.ibcslm-inline-value:focus-visible {
+  border-color: #9db8df;
+  background: #eef4ff;
+  outline: none;
+}
+
+.ibcslm-inline-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ibcslm-muted {
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.ibcslm-footer {
+  margin-top: 10px;
+}

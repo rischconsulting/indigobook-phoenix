@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "description": "CSL-M IndigoBook module loading + Juris-M-style abbreviations for US legal citations.",
   "author": "Michael Risch",
-  "icons": { "48": "content/ui/icon48.png" },
+  "icons": { "48": "content/ui/icon48.svg" },
   "applications": {
     "zotero": {
       "id": "indigobook-cslm@risch.example",

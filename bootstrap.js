@@ -40,20 +40,14 @@ async function startup({ id, version, rootURI }, reason) {
 
 async function shutdown({ id }, reason) {
   try {
-    if (Indigo?.deactivate) {
-      await Indigo.deactivate();
+    if (Zotero?.IndigoBookCSLM?.deactivate) {
+      await Zotero.IndigoBookCSLM.deactivate();
     }
   } catch (e) {
-    _logError("IndigoBook CSL-M plugin shutdown failed", e);
+    logError("IndigoBook CSL-M plugin shutdown failed", e);
   } finally {
-    try {
-      if (_resProto) _resProto.setSubstitution("indigobook-cslm", null);
-    } catch (_) {}
-    _resProto = null;
-    Indigo = null;
+    try { delete Zotero.IndigoBookCSLM; } catch (_) {}
   }
-
-  if (reason === APP_SHUTDOWN) return;
 }
 
 

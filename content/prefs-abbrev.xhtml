@@ -1,0 +1,38 @@
+<vbox id="ibcslm-prefpane"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:html="http://www.w3.org/1999/xhtml">
+  <vbox class="main-section">
+    <groupbox aria-label="IndigoBook CSL-M Secondary Abbreviations">
+      <label>
+        <html:h2>Secondary Abbreviations (US)</html:h2>
+      </label>
+
+      <html:p class="ibcslm-muted">Edit or add container-title abbreviations used as secondary lookups. Click an abbreviation to edit it. Changes are stored in Zotero preferences.</html:p>
+
+      <html:div class="ibcslm-row">
+        <html:input id="ibcslm-search" type="text" placeholder="Filter abbreviations" />
+        <html:button id="ibcslm-reset" type="button">Reset User Overrides</html:button>
+      </html:div>
+
+      <html:div class="ibcslm-row">
+        <html:input id="ibcslm-new-key" type="text" placeholder="New key (e.g., harvard journal of law)" />
+        <html:input id="ibcslm-new-value" type="text" placeholder="Abbreviation (e.g., Harv. J.L.)" />
+        <html:button id="ibcslm-add" type="button">Add / Update</html:button>
+      </html:div>
+
+      <html:table id="ibcslm-table">
+        <html:thead>
+          <html:tr>
+            <html:th style="width:35%">Key</html:th>
+            <html:th style="width:45%">Abbreviation</html:th>
+            <html:th style="width:10%">Source</html:th>
+            <html:th style="width:10%">Action</html:th>
+          </html:tr>
+        </html:thead>
+        <html:tbody id="ibcslm-body"></html:tbody>
+      </html:table>
+
+      <html:div class="ibcslm-footer" id="ibcslm-status"></html:div>
+    </groupbox>
+  </vbox>
+</vbox>
