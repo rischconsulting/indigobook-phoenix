@@ -1043,28 +1043,42 @@ ${mlzBlock}` : mlzBlock;
         const itemTypeName = Zotero?.ItemTypes?.getName?.(item.itemTypeID);
         if (itemTypeName !== "case") return;
         const reporter = String(item.getField?.("reporter") || "").trim();
+        const court = this.abbrevService.normalizeKey(item.getField?.("court") || "");
         const extra = String(item.getField?.("extra") || "");
         const mlzFields = this.Jurisdiction.getMLZExtraFields?.(extra) || null;
         const mlzReporter = String(mlzFields?.reporter || "").trim();
+        const mlzCourt = this.abbrevService.normalizeKey(mlzFields?.court || "");
+        const mlzJurisdiction = this.Jurisdiction.getMLZJurisdiction?.(extra) || "";
+        const derivedJurisdiction = this.Jurisdiction.fromItem(item);
+        let nextExtra = extra;
+        let changed = false;
         if (reporter && reporter !== mlzReporter) {
-          const updatedExtra = this.Jurisdiction.updateMLZExtraField?.(extra, "reporter", reporter) || extra;
-          if (updatedExtra !== extra) {
-            item.setField("extra", updatedExtra);
-            await item.saveTx({ skipDateModifiedUpdate: true });
-            try {
-              Zotero.debug(`[IndigoBook CSL-M] case reporter sync: wrote mlz reporter from Zotero field (item ${normalizedID})`);
-            } catch (e) {
-            }
-          }
-          return;
+          nextExtra = this.Jurisdiction.updateMLZExtraField?.(nextExtra, "reporter", reporter) || nextExtra;
         }
         if (!reporter && mlzReporter) {
           item.setField("reporter", mlzReporter);
-          await item.saveTx({ skipDateModifiedUpdate: true });
-          try {
-            Zotero.debug(`[IndigoBook CSL-M] case reporter sync: backfilled Zotero reporter from mlz (item ${normalizedID})`);
-          } catch (e) {
-          }
+          changed = true;
+        }
+        if (derivedJurisdiction && derivedJurisdiction !== mlzJurisdiction) {
+          const displayJurisdiction = this.abbrevService.formatJurisdictionDisplay(derivedJurisdiction);
+          nextExtra = this.Jurisdiction.updateMLZJurisdiction?.(nextExtra, derivedJurisdiction, displayJurisdiction) || nextExtra;
+        }
+        if (court && court !== mlzCourt) {
+          nextExtra = this.Jurisdiction.updateMLZExtraField?.(nextExtra, "court", court) || nextExtra;
+        }
+        if (!court && mlzCourt) {
+          item.setField("court", mlzCourt);
+          changed = true;
+        }
+        if (nextExtra !== extra) {
+          item.setField("extra", nextExtra);
+          changed = true;
+        }
+        if (!changed) return;
+        await item.saveTx({ skipDateModifiedUpdate: true });
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] case sync: wrote reporter/jurisdiction/court mlz state (item ${normalizedID})`);
+        } catch (e) {
         }
       } catch (e) {
         try {
