@@ -1004,6 +1004,7 @@ ${mlzBlock}` : mlzBlock;
       this._itemPanePatchAttempts = 0;
       this._maxItemPanePatchAttempts = 20;
       this._jurisdictionRowID = "ibcslm-jurisdiction-row";
+      this._customCourtRowID = "ibcslm-custom-court-row";
       this._syncInFlight = /* @__PURE__ */ new Set();
     }
     patch() {
@@ -1095,6 +1096,7 @@ ${mlzBlock}` : mlzBlock;
         try {
           self._renderJurisdictionField(this);
           self._renderCourtField(this);
+          self._renderCustomCourtField(this);
         } catch (e) {
           try {
             Zotero.debug(`[IndigoBook CSL-M] custom info row render failed: ${String(e)}`);
@@ -1136,6 +1138,7 @@ ${mlzBlock}` : mlzBlock;
           this._orig.infoBoxOwner.render = this._orig.infoBoxRender;
         }
         this._removeJurisdictionField(this._getActiveInfoBox());
+        this._removeCustomCourtField(this._getActiveInfoBox());
       } catch (e) {
       } finally {
         delete this._orig.infoBoxOwner;
@@ -1279,13 +1282,41 @@ ${mlzBlock}` : mlzBlock;
       const row = this._findInfoFieldRow(infoBox, "court");
       if (!row) return;
       if (!item || item.deleted || itemTypeName !== "case") {
+        this._removeCustomCourtField(infoBox);
         this._restoreCourtField(row, item);
         return;
       }
       this._updateCourtRow(infoBox, row, item);
     }
+    _renderCustomCourtField(infoBox) {
+      const item = infoBox?.item;
+      const itemTypeName = item ? Zotero?.ItemTypes?.getName?.(item.itemTypeID) : null;
+      const courtRow = this._findInfoFieldRow(infoBox, "court");
+      if (!courtRow) {
+        this._removeCustomCourtField(infoBox);
+        return;
+      }
+      if (!item || item.deleted || itemTypeName !== "case" || !infoBox.editable) {
+        this._removeCustomCourtField(infoBox);
+        return;
+      }
+      const table = this._getInfoTable(infoBox);
+      if (!table) return;
+      const row = this._getOrCreateCustomCourtRow(infoBox);
+      if (courtRow.parentNode === table) {
+        const afterCourt = courtRow.nextSibling;
+        if (afterCourt !== row) table.insertBefore(row, afterCourt);
+      } else if (row.parentNode !== table) {
+        table.appendChild(row);
+      }
+      this._updateCustomCourtRow(row, item);
+    }
     _removeJurisdictionField(infoBox) {
       const row = infoBox?.querySelector?.(`#${this._jurisdictionRowID}`);
+      if (row?.parentNode) row.parentNode.removeChild(row);
+    }
+    _removeCustomCourtField(infoBox) {
+      const row = infoBox?.querySelector?.(`#${this._customCourtRowID}`);
       if (row?.parentNode) row.parentNode.removeChild(row);
     }
     _getInfoTable(infoBox) {
@@ -1327,6 +1358,70 @@ ${mlzBlock}` : mlzBlock;
       row.appendChild(labelWrapper);
       row.appendChild(dataWrapper);
       return row;
+    }
+    _getOrCreateCustomCourtRow(infoBox) {
+      let row = infoBox.querySelector(`#${this._customCourtRowID}`);
+      if (row) return row;
+      const doc = infoBox.ownerDocument;
+      row = doc.createElement("div");
+      row.id = this._customCourtRowID;
+      row.className = "meta-row";
+      const labelWrapper = doc.createElement("div");
+      labelWrapper.className = "meta-label";
+      labelWrapper.setAttribute("fieldname", "custom-court");
+      let label;
+      if (typeof infoBox.createLabelElement === "function") {
+        label = infoBox.createLabelElement({
+          id: "itembox-field-custom-court-label",
+          text: "Custom Court"
+        });
+      } else {
+        label = doc.createElement("label");
+        label.id = "itembox-field-custom-court-label";
+        label.textContent = "Custom Court";
+      }
+      labelWrapper.appendChild(label);
+      const dataWrapper = doc.createElement("div");
+      dataWrapper.className = "meta-data";
+      row.appendChild(labelWrapper);
+      row.appendChild(dataWrapper);
+      return row;
+    }
+    _updateCustomCourtRow(row, item) {
+      const dataWrapper = row.querySelector(".meta-data");
+      if (!dataWrapper) return;
+      dataWrapper.textContent = "";
+      const doc = row.ownerDocument;
+      const container = doc.createElement("div");
+      container.style.display = "flex";
+      container.style.alignItems = "center";
+      container.style.gap = "6px";
+      const customInput = doc.createElement("input");
+      customInput.id = "itembox-field-court-custom";
+      customInput.className = "value";
+      customInput.placeholder = "Enter custom court key";
+      customInput.style.maxWidth = "220px";
+      const currentCourt = String(item?.getField?.("court") || "").trim();
+      customInput.value = currentCourt;
+      const saveCustomCourtValue = async () => {
+        const rawCustomValue = String(customInput.value || "").trim();
+        if (!rawCustomValue) return;
+        await this._saveCourtFromMenu(item, rawCustomValue);
+      };
+      const setButton = doc.createElement("button");
+      setButton.type = "button";
+      setButton.textContent = "Set";
+      setButton.addEventListener("click", () => {
+        saveCustomCourtValue();
+      });
+      customInput.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        saveCustomCourtValue();
+      });
+      container.appendChild(customInput);
+      container.appendChild(setButton);
+      dataWrapper.appendChild(container);
     }
     _updateJurisdictionRow(infoBox, row, item) {
       const dataWrapper = row.querySelector(".meta-data");
@@ -1462,6 +1557,8 @@ ${mlzBlock}` : mlzBlock;
       menulist.className = "zotero-clicky keyboard-clickable";
       menulist.setAttribute("aria-labelledby", "itembox-field-court-label");
       menulist.setAttribute("fieldname", "court");
+      menulist.setAttribute("editable", "true");
+      menulist.setAttribute("flex", "1");
       menulist.setAttribute("tooltiptext", currentCourtKey);
       const popup = menulist.appendChild(doc.createXULElement("menupopup"));
       const options = this._getCourtOptions(currentJurisdiction, currentCourtKey);
@@ -1481,11 +1578,13 @@ ${mlzBlock}` : mlzBlock;
       if (menulist.selectedItem && displayValue) {
         menulist.setAttribute("label", menulist.selectedItem.getAttribute("label"));
       }
-      menulist.addEventListener("command", async () => {
+      const saveCourtValue = async () => {
         const selectedValue = String(menulist.value || "").trim();
         if (!selectedValue) return;
         await this._saveCourtFromMenu(item, selectedValue);
-      });
+      };
+      menulist.addEventListener("command", saveCourtValue);
+      menulist.addEventListener("change", saveCourtValue);
       return menulist;
     }
     _getJurisdictionOptions(currentJurisdiction) {
