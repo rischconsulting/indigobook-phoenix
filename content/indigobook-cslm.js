@@ -543,6 +543,7 @@ ${mlzBlock}` : mlzBlock;
     _abbreviateByWords(title, jur, categories) {
       const source = (title || "").toString().trim();
       if (!source) return null;
+      if (/^(?:[A-Za-z]\.){2,}[A-Za-z]?\.?$/.test(source)) return null;
       const segments = this._tokenizeWordAndSeparatorSegments(source);
       const hasWord = segments.some((segment) => segment.type === "word");
       if (!hasWord) return null;
