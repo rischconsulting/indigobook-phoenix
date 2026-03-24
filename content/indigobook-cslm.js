@@ -216,14 +216,105 @@ ${mlzBlock}` : mlzBlock;
       return `${String(jurisdiction.length).padStart(3, "0")}${jurisdiction}${display}`;
     }
     static _fromKeyValue(extra) {
-      const m = extra.match(/^\s*jurisdiction\s*:\s*([^\s\n\r]+)\s*$/im);
+      const m = extra.match(/^\s*jurisdiction\s*:\s*([^\n\r]+?)\s*$/im);
       return m ? m[1] : null;
     }
     static _normalizeJurisdiction(jur) {
       let value = (jur || "").toString().trim().toLowerCase();
       if (!value) return "us";
+      const stateInfoByName = {
+        alabama: { code: "al", circuit: "11" },
+        alaska: { code: "ak", circuit: "9" },
+        arizona: { code: "az", circuit: "9" },
+        arkansas: { code: "ar", circuit: "8" },
+        california: { code: "ca", circuit: "9" },
+        colorado: { code: "co", circuit: "10" },
+        connecticut: { code: "ct", circuit: "2" },
+        delaware: { code: "de", circuit: "3" },
+        districtofcolumbia: { code: "dc", circuit: "0" },
+        dc: { code: "dc", circuit: "0" },
+        florida: { code: "fl", circuit: "11" },
+        georgia: { code: "ga", circuit: "11" },
+        hawaii: { code: "hi", circuit: "9" },
+        idaho: { code: "id", circuit: "9" },
+        illinois: { code: "il", circuit: "7" },
+        indiana: { code: "in", circuit: "7" },
+        iowa: { code: "ia", circuit: "8" },
+        kansas: { code: "ks", circuit: "10" },
+        kentucky: { code: "ky", circuit: "6" },
+        louisiana: { code: "la", circuit: "5" },
+        maine: { code: "me", circuit: "1" },
+        maryland: { code: "md", circuit: "4" },
+        massachusetts: { code: "ma", circuit: "1" },
+        michigan: { code: "mi", circuit: "6" },
+        minnesota: { code: "mn", circuit: "8" },
+        mississippi: { code: "ms", circuit: "5" },
+        missouri: { code: "mo", circuit: "8" },
+        montana: { code: "mt", circuit: "9" },
+        nebraska: { code: "ne", circuit: "8" },
+        nevada: { code: "nv", circuit: "9" },
+        newhampshire: { code: "nh", circuit: "1" },
+        newjersey: { code: "nj", circuit: "3" },
+        newmexico: { code: "nm", circuit: "10" },
+        newyork: { code: "ny", circuit: "2" },
+        northcarolina: { code: "nc", circuit: "4" },
+        northdakota: { code: "nd", circuit: "8" },
+        ohio: { code: "oh", circuit: "6" },
+        oklahoma: { code: "ok", circuit: "10" },
+        oregon: { code: "or", circuit: "9" },
+        pennsylvania: { code: "pa", circuit: "3" },
+        puertorico: { code: "pr", circuit: "1" },
+        rhodeisland: { code: "ri", circuit: "1" },
+        southcarolina: { code: "sc", circuit: "4" },
+        southdakota: { code: "sd", circuit: "8" },
+        tennessee: { code: "tn", circuit: "6" },
+        texas: { code: "tx", circuit: "5" },
+        utah: { code: "ut", circuit: "10" },
+        vermont: { code: "vt", circuit: "2" },
+        virginia: { code: "va", circuit: "4" },
+        washington: { code: "wa", circuit: "9" },
+        westvirginia: { code: "wv", circuit: "4" },
+        wisconsin: { code: "wi", circuit: "7" },
+        wyoming: { code: "wy", circuit: "10" },
+        guam: { code: "gu", circuit: "9" },
+        usvirginislands: { code: "vi", circuit: "3" },
+        virginislands: { code: "vi", circuit: "3" },
+        northernmarianaislands: { code: "mp", circuit: "9" }
+      };
       if (/^us(?::[a-z0-9._-]+)*$/.test(value)) return value;
       if (/^[a-z]{2}$/.test(value)) return `us:${value}`;
+      const districtMatch = value.match(/^([nsewmc])?\s*\.?\s*d\.?\s+(.+)$/i);
+      if (districtMatch) {
+        const districtPart = districtMatch[1] ? `${String(districtMatch[1]).toLowerCase()}d` : "d";
+        const stateCompact = String(districtMatch[2] || "").replace(/[^a-z]/g, "");
+        const state = stateInfoByName[stateCompact];
+        if (state?.code) {
+          if (state.code === "dc") return "us:dc.d";
+          if (state.circuit) return `us:c${state.circuit}:${state.code}.${districtPart}`;
+          return `us:${state.code}.${districtPart}`;
+        }
+      }
+      const compact = value.replace(/[^a-z0-9]/g, "");
+      if (compact === "federalcircuit" || compact === "fedcir" || compact === "cafc") return "us:c";
+      if (compact === "dccircuit" || compact === "districtofcolumbiacircuit" || compact === "dccir") return "us:c0";
+      const ordinals = {
+        first: "1",
+        second: "2",
+        third: "3",
+        fourth: "4",
+        fifth: "5",
+        sixth: "6",
+        seventh: "7",
+        eighth: "8",
+        ninth: "9",
+        tenth: "10",
+        eleventh: "11"
+      };
+      for (const [word, num] of Object.entries(ordinals)) {
+        if (compact === `${word}circuit`) return `us:c${num}`;
+      }
+      const numbered = compact.match(/^(1|2|3|4|5|6|7|8|9|10|11)(st|nd|rd|th)?circuit$/);
+      if (numbered) return `us:c${numbered[1]}`;
       const byName = {
         ohio: "us:oh",
         california: "us:ca",
@@ -236,8 +327,9 @@ ${mlzBlock}` : mlzBlock;
         massachusetts: "us:ma",
         michigan: "us:mi"
       };
-      const compact = value.replace(/[^a-z]/g, "");
-      if (byName[compact]) return byName[compact];
+      const compactAlpha = value.replace(/[^a-z]/g, "");
+      if (stateInfoByName[compactAlpha]?.code) return `us:${stateInfoByName[compactAlpha].code}`;
+      if (byName[compactAlpha]) return byName[compactAlpha];
       return value;
     }
     static trimChain(jur) {
@@ -991,10 +1083,11 @@ ${mlzBlock}` : mlzBlock;
 
   // lib/services/patcher.mjs
   var Patcher = class {
-    constructor({ moduleLoader, abbrevService, jurisdiction }) {
+    constructor({ moduleLoader, abbrevService, jurisdiction, caseCourtMapper }) {
       this.moduleLoader = moduleLoader;
       this.abbrevService = abbrevService;
       this.Jurisdiction = jurisdiction;
+      this.caseCourtMapper = caseCourtMapper || null;
       this._orig = {};
       this._didWarnNoSyncStyleRead = false;
       this._didWarnRetrieveItem = false;
@@ -1175,15 +1268,33 @@ ${mlzBlock}` : mlzBlock;
         const itemTypeName = Zotero?.ItemTypes?.getName?.(item.itemTypeID);
         if (itemTypeName !== "case") return;
         const reporter = String(item.getField?.("reporter") || "").trim();
-        const court = this.abbrevService.normalizeKey(item.getField?.("court") || "");
+        const rawCourt = String(item.getField?.("court") || "").trim();
+        const parsedCourt = this.caseCourtMapper?.mapCaseCourt?.(rawCourt) || null;
+        const mappedCourt = this.abbrevService.normalizeKey(parsedCourt?.courtKey || "");
+        const mappedJurisdiction = String(parsedCourt?.jurisdiction || "").trim().toLowerCase();
+        const court = this.abbrevService.normalizeKey(rawCourt || "");
         const extra = String(item.getField?.("extra") || "");
         const mlzFields = this.Jurisdiction.getMLZExtraFields?.(extra) || null;
         const mlzReporter = String(mlzFields?.reporter || "").trim();
         const mlzCourt = this.abbrevService.normalizeKey(mlzFields?.court || "");
         const mlzJurisdiction = this.Jurisdiction.getMLZJurisdiction?.(extra) || "";
         const derivedJurisdiction = this.Jurisdiction.fromItem(item);
+        const inferredJurisdiction = mappedJurisdiction || derivedJurisdiction;
+        const upgradedCourt = this._upgradeGenericCourtKey(court, inferredJurisdiction);
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] case court mapping: raw="${rawCourt}" mappedCourt="${mappedCourt}" mappedJurisdiction="${mappedJurisdiction}" derivedJurisdiction="${derivedJurisdiction}" inferredJurisdiction="${inferredJurisdiction}" upgradedCourt="${upgradedCourt}"`);
+        } catch (e) {
+        }
         let nextExtra = extra;
         let changed = false;
+        const hasCourtKeyAlready = this._looksLikeCourtKey(rawCourt);
+        const targetCourt = mappedCourt || upgradedCourt;
+        if (targetCourt && (!hasCourtKeyAlready || court !== targetCourt)) {
+          item.setField("court", targetCourt);
+          changed = true;
+        }
+        const effectiveCourt = targetCourt || court;
+        const effectiveJurisdiction = inferredJurisdiction;
         if (reporter && reporter !== mlzReporter) {
           nextExtra = this.Jurisdiction.updateMLZExtraField?.(nextExtra, "reporter", reporter) || nextExtra;
         }
@@ -1191,14 +1302,14 @@ ${mlzBlock}` : mlzBlock;
           item.setField("reporter", mlzReporter);
           changed = true;
         }
-        if (derivedJurisdiction && derivedJurisdiction !== mlzJurisdiction) {
-          const displayJurisdiction = this.abbrevService.formatJurisdictionDisplay(derivedJurisdiction);
-          nextExtra = this.Jurisdiction.updateMLZJurisdiction?.(nextExtra, derivedJurisdiction, displayJurisdiction) || nextExtra;
+        if (effectiveJurisdiction && effectiveJurisdiction !== mlzJurisdiction) {
+          const displayJurisdiction = this.abbrevService.formatJurisdictionDisplay(effectiveJurisdiction);
+          nextExtra = this.Jurisdiction.updateMLZJurisdiction?.(nextExtra, effectiveJurisdiction, displayJurisdiction) || nextExtra;
         }
-        if (court && court !== mlzCourt) {
-          nextExtra = this.Jurisdiction.updateMLZExtraField?.(nextExtra, "court", court) || nextExtra;
+        if (effectiveCourt && effectiveCourt !== mlzCourt) {
+          nextExtra = this.Jurisdiction.updateMLZExtraField?.(nextExtra, "court", effectiveCourt) || nextExtra;
         }
-        if (!court && mlzCourt) {
+        if (!effectiveCourt && mlzCourt) {
           item.setField("court", mlzCourt);
           changed = true;
         }
@@ -1224,6 +1335,23 @@ ${mlzBlock}` : mlzBlock;
       } finally {
         this._syncInFlight.delete(normalizedID);
       }
+    }
+    _looksLikeCourtKey(value) {
+      const normalized = this.abbrevService.normalizeKey(value || "");
+      if (!normalized) return false;
+      return /^[a-z0-9]+(?:\.[a-z0-9]+)*$/.test(normalized);
+    }
+    _upgradeGenericCourtKey(courtKey, jurisdiction) {
+      const key = this.abbrevService.normalizeKey(courtKey || "");
+      const jur = String(jurisdiction || "").trim().toLowerCase();
+      if (!key) return "";
+      if ((key === "court.appeal" || key === "court.appeals") && jur === "us:c") {
+        return "court.appeals.federal.circuit";
+      }
+      if (key === "court.appeal") {
+        return "court.appeals";
+      }
+      return "";
     }
     async _syncCaseReporterFromActiveSelection() {
       try {
@@ -2281,11 +2409,154 @@ ${mlzBlock}` : mlzBlock;
     }
   };
 
+  // lib/services/caseCourtMapper.mjs
+  var CaseCourtMapper = class {
+    constructor({ dataStore }) {
+      this.dataStore = dataStore;
+      this._config = null;
+    }
+    async preload() {
+      this._config = await this.dataStore.loadJSON("data/case-jurisdiction-map.json").catch(() => null);
+    }
+    mapCaseCourt(rawCourt) {
+      const source = String(rawCourt || "").trim();
+      if (!source) return { courtKey: "", jurisdiction: "" };
+      const courtLine = source.replace(/\s+/g, " ").replace(/\.$/, "").trim();
+      const courtKey = this._mapCourtKey(courtLine);
+      const jurisdiction = this._mapJurisdiction(courtLine);
+      return { courtKey, jurisdiction };
+    }
+    _mapCourtKey(courtLine) {
+      const haystack = this._normalizeForPattern(courtLine || "");
+      const aliases = Array.isArray(this._config?.courtKeyAliases) ? this._config.courtKeyAliases : [];
+      for (const alias of aliases) {
+        const needle = this._normalizeForPattern(alias?.pattern || "");
+        const value = String(alias?.value || "").trim();
+        if (!needle || !value) continue;
+        if (haystack.includes(needle)) return value;
+      }
+      const rules = Array.isArray(this._config?.courtKeyRules) ? this._config.courtKeyRules : [];
+      for (const rule of rules) {
+        const needle = this._normalizeForPattern(rule?.pattern || "");
+        const value = String(rule?.value || "").trim();
+        if (!needle || !value) continue;
+        if (haystack.includes(needle)) return value;
+      }
+      return "";
+    }
+    _mapJurisdiction(courtLine) {
+      const normalized = String(courtLine || "").replace(/,\s*[a-zA-Z]+\s*Division\.?$/i, "").trim();
+      const exactUSSupreme = /^Supreme Court of the United States$/i;
+      if (exactUSSupreme.test(normalized)) return "us";
+      const circuitMatch = normalized.match(/^United States Court of Appeals,\s+(.+?)\s+Circuit$/i);
+      if (circuitMatch) {
+        const circuitName = String(circuitMatch[1] || "").trim().toLowerCase();
+        const ordinalMap = {
+          federal: "federal",
+          "district of columbia": "0",
+          "d.c.": "0",
+          first: "1",
+          second: "2",
+          third: "3",
+          fourth: "4",
+          fifth: "5",
+          sixth: "6",
+          seventh: "7",
+          eighth: "8",
+          ninth: "9",
+          tenth: "10",
+          eleventh: "11"
+        };
+        const token = ordinalMap[circuitName];
+        if (token === "federal") return "us:c";
+        return token ? `us:c${token}` : "";
+      }
+      if (/\b(fed|federal)\.?\s+cir(cuit)?\.?\b/i.test(normalized)) {
+        return "us:c";
+      }
+      const numberedCircuit = normalized.match(/\b(1|2|3|4|5|6|7|8|9|10|11)(st|nd|rd|th)?\s+cir(cuit)?\.?\b/i);
+      if (numberedCircuit) {
+        return `us:c${String(numberedCircuit[1])}`;
+      }
+      const dcCircuit = /\b(d\.c\.|district of columbia)\s+cir(cuit)?\.?\b/i;
+      if (dcCircuit.test(normalized)) {
+        return "us:c0";
+      }
+      const districtMatch = normalized.match(/^United States District Court,\s+(.+)$/i);
+      if (districtMatch) {
+        return this._mapFederalDistrict(String(districtMatch[1] || "").trim());
+      }
+      return this._mapStateOrTerritoryJurisdiction(normalized);
+    }
+    _mapFederalDistrict(rawDistrictText) {
+      const districtText = String(rawDistrictText || "").trim();
+      if (!districtText) return "";
+      let partMatch = districtText.match(/^(N|S|E|W|M|C)\.D\.\s+(.+)$/i);
+      let districtToken = "";
+      let stateName = "";
+      if (partMatch) {
+        const part = String(partMatch[1] || "").toUpperCase();
+        districtToken = `${part.toLowerCase()}d`;
+        stateName = String(partMatch[2] || "").trim();
+      } else {
+        partMatch = districtText.match(/^D\.\s+(.+)$/i);
+        if (!partMatch) return "";
+        districtToken = "d";
+        stateName = String(partMatch[1] || "").trim();
+      }
+      const state = this._lookupStateInfo(stateName);
+      if (!state?.code) return "";
+      if (state.code === "dc") {
+        return "us:dc.d";
+      }
+      if (!state.circuit) {
+        return `us:${state.code}.${districtToken}`;
+      }
+      return `us:c${state.circuit}:${state.code}.${districtToken}`;
+    }
+    _mapStateOrTerritoryJurisdiction(courtLine) {
+      const states = this._config?.states;
+      if (!states || typeof states !== "object") return "";
+      for (const [name, info] of Object.entries(states)) {
+        const pattern = new RegExp(`(?:^|\\s|,)${this._escapeRegex(name)}(?:$|\\s|[.,])`, "i");
+        if (!pattern.test(courtLine)) continue;
+        const code = String(info?.code || "").trim().toLowerCase();
+        if (!code) continue;
+        return `us:${code}`;
+      }
+      return "";
+    }
+    _lookupStateInfo(rawName) {
+      const states = this._config?.states;
+      if (!states || typeof states !== "object") return null;
+      const name = String(rawName || "").trim().replace(/\.$/, "");
+      if (!name) return null;
+      if (states[name]) return states[name];
+      const synonyms = {
+        "D.C.": "District of Columbia",
+        DC: "District of Columbia",
+        "Virgin Islands": "U.S. Virgin Islands"
+      };
+      const canonical = synonyms[name] || name;
+      return states[canonical] || null;
+    }
+    _escapeRegex(value) {
+      return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+    _normalizeForPattern(value) {
+      return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    }
+  };
+
   // lib/main.mjs
   var _ctx;
   var BUNDLED_STYLE_FILES = [
     "jm-indigobook.csl",
     "jm-indigobook-law-review.csl"
+  ];
+  var BUNDLED_TRANSLATOR_FILES = [
+    "Lexis+.js",
+    "Westlaw.js"
   ];
   function _extractStyleID(styleXML) {
     if (!styleXML) return "";
@@ -2346,6 +2617,57 @@ ${mlzBlock}` : mlzBlock;
       }
     }
   }
+  function _extractTranslatorMetadata(code) {
+    const match = code.match(/^\s*(\{[\s\S]*?\})\s*(?=\n[^}]|\nfunction|\nvar |\nconst |\nlet |\/\*)/m);
+    if (!match) return null;
+    try {
+      return JSON.parse(match[1]);
+    } catch (e) {
+      return null;
+    }
+  }
+  async function _installTranslatorIfMissing({ dataStore, relPath }) {
+    const code = await dataStore.loadText(relPath);
+    const metadata = _extractTranslatorMetadata(code);
+    if (!metadata?.translatorID) {
+      try {
+        Zotero.debug(`[IndigoBook CSL-M] translator install skipped (missing translatorID): ${relPath}`);
+      } catch (e) {
+      }
+      return;
+    }
+    const saveFn = Zotero?.Translators?.save;
+    if (typeof saveFn !== "function") {
+      try {
+        Zotero.debug(`[IndigoBook CSL-M] translator install unavailable (no Zotero.Translators.save): ${metadata.label}`);
+      } catch (e) {
+      }
+      return;
+    }
+    let installed = false;
+    try {
+      await saveFn.call(Zotero.Translators, metadata, code);
+      installed = !!Zotero?.Translators?.get?.(metadata.translatorID);
+    } catch (e) {
+    }
+    try {
+      Zotero.debug(`[IndigoBook CSL-M] translator ${installed ? "installed" : "install failed"}: ${metadata.label}`);
+    } catch (e) {
+    }
+  }
+  async function _ensureBundledTranslatorsInstalled({ dataStore }) {
+    for (const file of BUNDLED_TRANSLATOR_FILES) {
+      const relPath = `translators/${file}`;
+      try {
+        await _installTranslatorIfMissing({ dataStore, relPath });
+      } catch (e) {
+        try {
+          Zotero.debug(`[IndigoBook CSL-M] translator install error (${relPath}): ${String(e)}`);
+        } catch (_) {
+        }
+      }
+    }
+  }
   async function activate({ id, version, rootURI }) {
     _ctx = {
       id,
@@ -2354,19 +2676,24 @@ ${mlzBlock}` : mlzBlock;
       data: new DataStore(rootURI),
       modules: null,
       abbrevs: null,
+      caseCourtMapper: null,
       patcher: null,
       prefsUI: null
     };
     await _ctx.data.init();
     await _ensureBundledStylesInstalled({ rootURI, dataStore: _ctx.data });
+    await _ensureBundledTranslatorsInstalled({ dataStore: _ctx.data });
     _ctx.modules = new ModuleLoader({ rootURI, dataStore: _ctx.data });
     await _ctx.modules.preload();
     _ctx.abbrevs = new AbbrevService({ dataStore: _ctx.data });
     await _ctx.abbrevs.preload();
+    _ctx.caseCourtMapper = new CaseCourtMapper({ dataStore: _ctx.data });
+    await _ctx.caseCourtMapper.preload();
     _ctx.patcher = new Patcher({
       moduleLoader: _ctx.modules,
       abbrevService: _ctx.abbrevs,
-      jurisdiction: Jurisdiction
+      jurisdiction: Jurisdiction,
+      caseCourtMapper: _ctx.caseCourtMapper
     });
     _ctx.patcher.patch();
     _ctx.prefsUI = new PrefsUI({

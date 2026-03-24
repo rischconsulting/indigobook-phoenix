@@ -1,4 +1,4 @@
-# IndigoBook-Phoenix (Zotero 8) - v0.2.0
+# IndigoBook-Phoenix (Zotero 8) - v0.3.0
 
 This plugin bundles US IndigoTemp jurisdiction modules and uses dynamic module loading via
 `sys.loadJurisdictionStyle(jurisdiction, variantName)` so multiple US jurisdictions can appear in one document.
