@@ -28,6 +28,9 @@ The jurisdiction/court logic is focused on Zotero items of type `case`.
 	- MLZ jurisdiction in `Extra`
 	- Zotero `court` field key
 
+### Jurisdiction and Court Matching on Import
+New in version 0.3.0, the plugin will attempt to discern the jurisdiction and court and assign proper jurisdiction and court codes to them to reduce time spent recoding.
+
 ### Synchronization Rules
 
 On item add/modify/select/render events, the plugin syncs case fields and MLZ payload values:
@@ -79,7 +82,7 @@ Pane location and assets:
 
 The panel supports two working modes via dataset selection:
 
-- Journals mode (`journals:secondary-us-bluebook`)
+- Journals mode (`journals:secondary-us-bluebook`, `journals:secondary-science`)
 - Jurisdiction mode (`primary-us`, `auto-us`, `juris-us-map`)
 
 ### What You Can Do In The Panel

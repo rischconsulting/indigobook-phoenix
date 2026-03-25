@@ -37,6 +37,7 @@ var IndigoBookCSLM = (() => {
         this.loadJSON("data/primary-jurisdictions.json").catch(() => null),
         this.loadJSON("data/primary-us.json").catch(() => null),
         this.loadJSON("data/secondary-us-bluebook.json").catch(() => null),
+        this.loadJSON("data/secondary-science.json").catch(() => null),
         this.loadJSON("style-modules/index.json").catch(() => null)
       ]);
     }
@@ -399,7 +400,9 @@ ${mlzBlock}` : mlzBlock;
       this.dataStore = dataStore;
       this._autoUS = null;
       this._primaryUS = null;
-      this._secondaryUS = null;
+      this._secondaryDatasets = {};
+      this._secondaryDatasetOrder = ["secondary-us-bluebook", "secondary-science"];
+      this._defaultSecondaryDataset = "secondary-us-bluebook";
       this._jurisUSMap = null;
       this._primaryJur = null;
       this._userSecondaryOverrides = {};
@@ -410,7 +413,10 @@ ${mlzBlock}` : mlzBlock;
     async preload() {
       this._autoUS = await this.dataStore.loadJSON("data/auto-us.json");
       this._primaryUS = await this.dataStore.loadJSON("data/primary-us.json");
-      this._secondaryUS = await this.dataStore.loadJSON("data/secondary-us-bluebook.json");
+      this._secondaryDatasets = {
+        "secondary-us-bluebook": await this.dataStore.loadJSON("data/secondary-us-bluebook.json"),
+        "secondary-science": await this.dataStore.loadJSON("data/secondary-science.json").catch(() => null)
+      };
       this._jurisUSMap = await this.dataStore.loadJSON("data/juris-us-map.json");
       this._primaryJur = await this.dataStore.loadJSON("data/primary-jurisdictions.json");
       this._userSecondaryOverrides = this._loadSecondaryOverrides();
@@ -722,7 +728,7 @@ ${mlzBlock}` : mlzBlock;
           normalized
         );
         if (primaryHit?.value) return primaryHit;
-        const secondaryValue = category === "container-title" ? this._lookupSecondaryContainerTitle(normalized) : this._secondaryUS?.xdata?.default?.[category]?.[normalized] || this._lookupSecondaryContainerTitle(normalized) || null;
+        const secondaryValue = category === "container-title" ? this._lookupSecondaryContainerTitle(normalized) : this._lookupSecondaryCategoryValue(category, normalized) || this._lookupSecondaryContainerTitle(normalized) || null;
         if (secondaryValue) return { jurisdiction: "default", value: secondaryValue };
       }
       return null;
@@ -770,33 +776,42 @@ ${mlzBlock}` : mlzBlock;
       if ((jurisdiction || "").toLowerCase() === "us") return "US";
       return String(label || "").trim();
     }
-    listSecondaryContainerTitleAbbreviations() {
-      const base = this._secondaryUS?.xdata?.default?.["container-title"] || {};
-      const merged = { ...base, ...this._userSecondaryOverrides };
+    listSecondaryContainerTitleAbbreviations(rawDataset = this._defaultSecondaryDataset) {
+      const dataset = this._normalizeSecondaryDataset(rawDataset);
+      const base = this._secondaryDatasets?.[dataset]?.xdata?.default?.["container-title"] || {};
+      const user = this._userSecondaryOverrides?.[dataset] || {};
+      const merged = { ...base, ...user };
       return Object.keys(merged).sort((a, b) => a.localeCompare(b)).map((key) => ({
         key,
         value: merged[key],
-        source: Object.prototype.hasOwnProperty.call(this._userSecondaryOverrides, key) ? "user" : "base"
+        source: Object.prototype.hasOwnProperty.call(user, key) ? "user" : "base"
       }));
     }
-    upsertSecondaryContainerTitleAbbreviation(rawKey, rawValue) {
+    upsertSecondaryContainerTitleAbbreviation(rawDataset, rawKey, rawValue) {
+      const dataset = this._normalizeSecondaryDataset(rawDataset);
       const key = this.normalizeKey(rawKey);
       const value = (rawValue || "").toString().trim();
       if (!key || !value) return false;
-      this._userSecondaryOverrides[key] = value;
+      if (!this._userSecondaryOverrides[dataset] || typeof this._userSecondaryOverrides[dataset] !== "object") {
+        this._userSecondaryOverrides[dataset] = {};
+      }
+      this._userSecondaryOverrides[dataset][key] = value;
       this._saveSecondaryOverrides();
       return true;
     }
-    removeSecondaryContainerTitleAbbreviation(rawKey) {
+    removeSecondaryContainerTitleAbbreviation(rawDataset, rawKey) {
+      const dataset = this._normalizeSecondaryDataset(rawDataset);
       const key = this.normalizeKey(rawKey);
       if (!key) return false;
-      if (!Object.prototype.hasOwnProperty.call(this._userSecondaryOverrides, key)) return false;
-      delete this._userSecondaryOverrides[key];
+      const bucket = this._userSecondaryOverrides?.[dataset];
+      if (!bucket || !Object.prototype.hasOwnProperty.call(bucket, key)) return false;
+      delete bucket[key];
       this._saveSecondaryOverrides();
       return true;
     }
-    resetSecondaryContainerTitleOverrides() {
-      this._userSecondaryOverrides = {};
+    resetSecondaryContainerTitleOverrides(rawDataset = this._defaultSecondaryDataset) {
+      const dataset = this._normalizeSecondaryDataset(rawDataset);
+      this._userSecondaryOverrides[dataset] = {};
       this._saveSecondaryOverrides();
     }
     listJurisdictionPreferenceEntries() {
@@ -841,12 +856,48 @@ ${mlzBlock}` : mlzBlock;
       this._userJurisdictionOverrides = {};
       this._saveJurisdictionOverrides();
     }
-    _lookupSecondaryContainerTitle(normalizedKey) {
+    _lookupSecondaryContainerTitle(normalizedKey, rawDataset = null) {
       if (!normalizedKey) return null;
-      if (Object.prototype.hasOwnProperty.call(this._userSecondaryOverrides, normalizedKey)) {
-        return this._userSecondaryOverrides[normalizedKey];
+      const dataset = rawDataset ? this._normalizeSecondaryDataset(rawDataset) : null;
+      if (dataset) {
+        const bucket = this._userSecondaryOverrides?.[dataset] || {};
+        if (Object.prototype.hasOwnProperty.call(bucket, normalizedKey)) {
+          return bucket[normalizedKey];
+        }
+        return this._secondaryDatasets?.[dataset]?.xdata?.default?.["container-title"]?.[normalizedKey] || null;
       }
-      return this._secondaryUS?.xdata?.default?.["container-title"]?.[normalizedKey] || null;
+      for (const name of this._getSecondaryLookupOrder()) {
+        const bucket = this._userSecondaryOverrides?.[name] || {};
+        if (Object.prototype.hasOwnProperty.call(bucket, normalizedKey)) {
+          return bucket[normalizedKey];
+        }
+        const value = this._secondaryDatasets?.[name]?.xdata?.default?.["container-title"]?.[normalizedKey];
+        if (value) return value;
+      }
+      return null;
+    }
+    _lookupSecondaryCategoryValue(category, normalizedKey) {
+      if (!category || !normalizedKey) return null;
+      for (const name of this._getSecondaryLookupOrder()) {
+        const value = this._secondaryDatasets?.[name]?.xdata?.default?.[category]?.[normalizedKey];
+        if (value) return value;
+      }
+      return null;
+    }
+    _getSecondaryLookupOrder() {
+      const names = [];
+      for (const name of this._secondaryDatasetOrder) {
+        if (this._secondaryDatasets?.[name]) names.push(name);
+      }
+      for (const name of Object.keys(this._secondaryDatasets || {})) {
+        if (!names.includes(name) && this._secondaryDatasets?.[name]) names.push(name);
+      }
+      return names;
+    }
+    _normalizeSecondaryDataset(rawDataset) {
+      const dataset = (rawDataset || "").toString().trim() || this._defaultSecondaryDataset;
+      if (this._secondaryDatasets?.[dataset]) return dataset;
+      return this._defaultSecondaryDataset;
     }
     _loadSecondaryOverrides() {
       try {
@@ -854,11 +905,26 @@ ${mlzBlock}` : mlzBlock;
         if (!raw) return {};
         const parsed = JSON.parse(raw);
         if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+        const looksFlat = Object.values(parsed).some((v) => typeof v === "string" || typeof v === "number");
+        if (looksFlat) {
+          const migrated = {};
+          for (const [k, v] of Object.entries(parsed)) {
+            const key = this.normalizeKey(k);
+            const value = (v || "").toString().trim();
+            if (key && value) migrated[key] = value;
+          }
+          return { [this._defaultSecondaryDataset]: migrated };
+        }
         const cleaned = {};
-        for (const [k, v] of Object.entries(parsed)) {
-          const key = this.normalizeKey(k);
-          const value = (v || "").toString().trim();
-          if (key && value) cleaned[key] = value;
+        for (const [dataset, bucket] of Object.entries(parsed)) {
+          const ds = (dataset || "").toString().trim();
+          if (!ds || !bucket || typeof bucket !== "object" || Array.isArray(bucket)) continue;
+          cleaned[ds] = {};
+          for (const [k, v] of Object.entries(bucket)) {
+            const key = this.normalizeKey(k);
+            const value = (v || "").toString().trim();
+            if (key && value) cleaned[ds][key] = value;
+          }
         }
         return cleaned;
       } catch (e) {
@@ -2702,17 +2768,24 @@ ${mlzBlock}` : mlzBlock;
     });
     await _ctx.prefsUI.register();
     Zotero.IndigoBookCSLMBridge = {
-      listSecondaryAbbreviations() {
-        return _ctx?.abbrevs?.listSecondaryContainerTitleAbbreviations?.() || [];
+      listSecondaryAbbreviations(dataset = "secondary-us-bluebook") {
+        return _ctx?.abbrevs?.listSecondaryContainerTitleAbbreviations?.(dataset) || [];
       },
-      upsertSecondaryAbbreviation(key, value) {
-        return !!_ctx?.abbrevs?.upsertSecondaryContainerTitleAbbreviation?.(key, value);
+      upsertSecondaryAbbreviation(datasetOrKey, keyOrValue, maybeValue) {
+        const hasDataset = typeof maybeValue !== "undefined";
+        const dataset = hasDataset ? datasetOrKey : "secondary-us-bluebook";
+        const key = hasDataset ? keyOrValue : datasetOrKey;
+        const value = hasDataset ? maybeValue : keyOrValue;
+        return !!_ctx?.abbrevs?.upsertSecondaryContainerTitleAbbreviation?.(dataset, key, value);
       },
-      removeSecondaryAbbreviation(key) {
-        return !!_ctx?.abbrevs?.removeSecondaryContainerTitleAbbreviation?.(key);
+      removeSecondaryAbbreviation(datasetOrKey, maybeKey) {
+        const hasDataset = typeof maybeKey !== "undefined";
+        const dataset = hasDataset ? datasetOrKey : "secondary-us-bluebook";
+        const key = hasDataset ? maybeKey : datasetOrKey;
+        return !!_ctx?.abbrevs?.removeSecondaryContainerTitleAbbreviation?.(dataset, key);
       },
-      resetSecondaryAbbreviations() {
-        _ctx?.abbrevs?.resetSecondaryContainerTitleOverrides?.();
+      resetSecondaryAbbreviations(dataset = "secondary-us-bluebook") {
+        _ctx?.abbrevs?.resetSecondaryContainerTitleOverrides?.(dataset);
         return true;
       },
       listJurisdictionPreferenceEntries() {

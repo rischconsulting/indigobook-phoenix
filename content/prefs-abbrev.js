@@ -64,7 +64,7 @@
     const selection = getDatasetSelection();
 
     if (selection.kind === 'journals') {
-      const rows = bridge.listSecondaryAbbreviations?.() || [];
+      const rows = bridge.listSecondaryAbbreviations?.(selection.dataset) || [];
       return rows.map((row) => ({
         kind: 'journals',
         dataset: selection.dataset,
@@ -108,7 +108,7 @@
     if (!bridge) return false;
 
     if (row.kind === 'journals') {
-      return !!bridge.upsertSecondaryAbbreviation?.(row.key, value);
+      return !!bridge.upsertSecondaryAbbreviation?.(row.dataset, row.key, value);
     }
 
     return !!bridge.upsertJurisdictionPreferenceEntry?.(
@@ -125,7 +125,7 @@
     if (!bridge) return false;
 
     if (row.kind === 'journals') {
-      return !!bridge.removeSecondaryAbbreviation?.(row.key);
+      return !!bridge.removeSecondaryAbbreviation?.(row.dataset, row.key);
     }
 
     return !!bridge.removeJurisdictionPreferenceEntry?.(
@@ -278,7 +278,7 @@
     const selection = getDatasetSelection();
 
     if (selection.kind === 'journals') {
-      bridge.resetSecondaryAbbreviations?.();
+      bridge.resetSecondaryAbbreviations?.(selection.dataset);
       return true;
     }
 
@@ -331,7 +331,7 @@
     let ok = false;
 
     if (selection.kind === 'journals') {
-      ok = !!bridge.upsertSecondaryAbbreviation?.(key, value);
+      ok = !!bridge.upsertSecondaryAbbreviation?.(selection.dataset, key, value);
       if (!ok) {
         setStatus('Enter both key and value for journal overrides.', true);
         return;
