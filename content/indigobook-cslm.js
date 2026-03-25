@@ -2404,7 +2404,7 @@ ${mlzBlock}` : mlzBlock;
           src: `${base}content/prefs-abbrev.xhtml`,
           scripts: [`${base}content/prefs-abbrev.js`],
           stylesheets: [`${base}content/prefs-abbrev.css`],
-          label: "IndigoBook CSL-M",
+          label: "Phoenix",
           image: `${base}content/ui/icon48.svg`
         });
         this._paneID = pane?.id || pane || null;
