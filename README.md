@@ -1,4 +1,4 @@
-# IndigoBook-Phoenix (Zotero 8) - v0.4.0
+# IndigoBook-Phoenix (Zotero 8) - v0.2.0
 
 This plugin bundles US IndigoTemp jurisdiction modules and uses dynamic module loading via
 `sys.loadJurisdictionStyle(jurisdiction, variantName)` so multiple US jurisdictions can appear in one document.
@@ -29,7 +29,11 @@ The jurisdiction/court logic is focused on Zotero items of type `case`.
 	- Zotero `court` field key
 
 ### Jurisdiction and Court Matching on Import
+
 New in version 0.3.0, the plugin will attempt to discern the jurisdiction and court and assign proper jurisdiction and court codes to them to reduce time spent recoding.
+
+### Bundled translators
+New in version 0.4.0, working Westlaw and Lexis+ translators. These have not been merged into Zotero 8 for a variety of reasons, including my laziness in getting them compliant.
 
 ### Synchronization Rules
 
@@ -82,7 +86,7 @@ Pane location and assets:
 
 The panel supports two working modes via dataset selection:
 
-- Journals mode (`journals:secondary-us-bluebook`, `journals:secondary-science`)
+- Journals mode (`journals:secondary-us-bluebook`)
 - Jurisdiction mode (`primary-us`, `auto-us`, `juris-us-map`)
 
 ### What You Can Do In The Panel
