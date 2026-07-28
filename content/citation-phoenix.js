@@ -5549,11 +5549,16 @@ ${mlzBlock}` : mlzBlock;
       }
       this._containerTitleContextByKey.set(key, prior);
     }
-    _shouldAllowContainerTitleFallback(containerTitle) {
+    _shouldAllowContainerTitleFallback(containerTitle, styleID = "") {
+      if (!this._styleAllowsContainerTitleFallback(styleID)) return false;
       const key = this.abbrevService.normalizeKey(containerTitle || "");
       if (!key) return false;
       const context = this._containerTitleContextByKey.get(key);
       return !!(context?.journal || context?.englishBook);
+    }
+    _styleAllowsContainerTitleFallback(styleID) {
+      const key = String(styleID || "").trim().toLowerCase();
+      return key === "http://juris-m.github.io/styles/jm-indigobook" || key === "http://juris-m.github.io/styles/jm-indigobook-law-review";
     }
     _isEnglishLanguage(language) {
       const value = String(language || "").trim().toLowerCase();
@@ -5570,8 +5575,7 @@ ${mlzBlock}` : mlzBlock;
     _decorateShortForms(cslItem, jur) {
       try {
         if (!cslItem["container-title-short"] && cslItem["container-title"]) {
-          const allowFallback = this._shouldAllowContainerTitleFallback(cslItem["container-title"]);
-          const hit = this.abbrevService.lookupForCiteProc("container-title", cslItem["container-title"], jur, { noHints: !allowFallback });
+          const hit = this.abbrevService.lookupForCiteProc("container-title", cslItem["container-title"], jur, { noHints: true });
           if (hit?.value) {
             cslItem["container-title-short"] = this._protectAbbreviationValue(this.abbrevService.parseDirective(hit.value).value);
             this._logShortForm("container-title", cslItem["container-title"], cslItem["container-title-short"], "hit");
@@ -5706,7 +5710,7 @@ ${mlzBlock}` : mlzBlock;
               return jur;
             }
           }
-          const lookupNoHints = category === "title" ? true : category === "container-title" ? !self._shouldAllowContainerTitleFallback(key) : noHints;
+          const lookupNoHints = category === "title" ? true : category === "container-title" ? !self._shouldAllowContainerTitleFallback(key, styleID) : noHints;
           const hit = self.abbrevService.lookupForCiteProc(category, key, jur, { noHints: lookupNoHints });
           if (hit?.value) {
             const targetJur = hit.jurisdiction || jur || "default";

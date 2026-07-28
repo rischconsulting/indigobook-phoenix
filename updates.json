@@ -4,7 +4,7 @@
       "updates": [
         {
           "version": "0.8.1",
-          "update_link": "https://github.com/rischconsulting/citation-phoenix/releases/download/0.8.1b/citation-phoenix-0.8.1.xpi",
+          "update_link": "https://github.com/rischconsulting/citation-phoenix/releases/download/0.8.2b/citation-phoenix-0.8.2.xpi",
           "applications": {
             "zotero": {
               "strict_min_version": "8.0",
