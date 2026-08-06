@@ -1,7 +1,7 @@
 {
   "filename": "auto-at-enIBFD.json",
   "name": "Austria",
-  "version": "2026-07-22 20:44:51 UTC",
+  "version": "2026-08-06 16:17:02 UTC",
   "xdata": {
     "default": {
       "place": {
@@ -165,7 +165,8 @@
         "dsb": "Datenschutzbehörde",
         "bvga": "Bundesvergabeamt",
         "opms": "Oberster Patent- und Markensenat",
-        "bwb": "Bundeswettbewerbsbehörde"
+        "bwb": "Bundeswettbewerbsbehörde",
+        "rg": "RG"
       },
       "institution-entire": {
         "bfg": "BFG",
@@ -181,7 +182,8 @@
         "dsb": "DSB",
         "bvga": "BVA",
         "opms": "OPMS",
-        "bwb": "BWB"
+        "bwb": "BWB",
+        "rg": "RG"
       }
     },
     "at:burgenland": {

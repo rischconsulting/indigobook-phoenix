@@ -1,926 +1,926 @@
 [
-    {
-        "filename":  "juris-ad-map.json",
-        "name":  "Andorra"
-    },
-    {
-        "filename":  "juris-ae-map.json",
-        "name":  "United Arab Emirates"
-    },
-    {
-        "filename":  "juris-af-map.json",
-        "name":  "Afghanistan"
-    },
-    {
-        "filename":  "juris-ag-map.json",
-        "name":  "Antigua and Barbuda"
-    },
-    {
-        "filename":  "juris-ai-map.json",
-        "name":  "Anguilla"
-    },
-    {
-        "filename":  "juris-al-map.json",
-        "name":  "Albania"
-    },
-    {
-        "filename":  "juris-am-map.json",
-        "name":  "Armenia"
-    },
-    {
-        "filename":  "juris-ao-map.json",
-        "name":  "Angola"
-    },
-    {
-        "filename":  "juris-arb.cls-map.json",
-        "name":  "Arbitrations"
-    },
-    {
-        "filename":  "juris-ar-map.json",
-        "name":  "Argentina"
-    },
-    {
-        "filename":  "juris-at-map.json",
-        "name":  "Austria"
-    },
-    {
-        "filename":  "juris-au.int-map.json",
-        "name":  "African Union"
-    },
-    {
-        "filename":  "juris-au-map.json",
-        "name":  "Australia"
-    },
-    {
-        "filename":  "juris-az-map.json",
-        "name":  "Azerbaijan"
-    },
-    {
-        "filename":  "juris-ba-map.json",
-        "name":  "Sprska"
-    },
-    {
-        "filename":  "juris-bb-map.json",
-        "name":  "Barbados"
-    },
-    {
-        "filename":  "juris-bd-map.json",
-        "name":  "Bangladesh"
-    },
-    {
-        "filename":  "juris-be-map.json",
-        "name":  "België"
-    },
-    {
-        "filename":  "juris-bf-map.json",
-        "name":  "Burkina Faso"
-    },
-    {
-        "filename":  "juris-bg-map.json",
-        "name":  "Bulgaria"
-    },
-    {
-        "filename":  "juris-bh-map.json",
-        "name":  "Bahrain"
-    },
-    {
-        "filename":  "juris-bi-map.json",
-        "name":  "Burundi"
-    },
-    {
-        "filename":  "juris-bj-map.json",
-        "name":  "Benin"
-    },
-    {
-        "filename":  "juris-bn-map.json",
-        "name":  "Brunei"
-    },
-    {
-        "filename":  "juris-bo-map.json",
-        "name":  "Bolivia"
-    },
-    {
-        "filename":  "juris-br-map.json",
-        "name":  "Brazil"
-    },
-    {
-        "filename":  "juris-bs-map.json",
-        "name":  "The Bahamas"
-    },
-    {
-        "filename":  "juris-bt-map.json",
-        "name":  "Bhutan"
-    },
-    {
-        "filename":  "juris-bw-map.json",
-        "name":  "Botswana"
-    },
-    {
-        "filename":  "juris-by-map.json",
-        "name":  "Belarus"
-    },
-    {
-        "filename":  "juris-bz-map.json",
-        "name":  "Belize"
-    },
-    {
-        "filename":  "juris-ca-map.json",
-        "name":  "Canada"
-    },
-    {
-        "filename":  "juris-cd-map.json",
-        "name":  "Dem. Rep. of the Congo"
-    },
-    {
-        "filename":  "juris-cf-map.json",
-        "name":  "Central African Republic"
-    },
-    {
-        "filename":  "juris-cg-map.json",
-        "name":  "Rep. of the Congo"
-    },
-    {
-        "filename":  "juris-ch-map.json",
-        "name":  "Switzerland"
-    },
-    {
-        "filename":  "juris-ci-map.json",
-        "name":  "Côte d\u0027Ivoire"
-    },
-    {
-        "filename":  "juris-ck-map.json",
-        "name":  "Cook Islands"
-    },
-    {
-        "filename":  "juris-cl-map.json",
-        "name":  "Chile"
-    },
-    {
-        "filename":  "juris-cm-map.json",
-        "name":  "Cameroon"
-    },
-    {
-        "filename":  "juris-cn-map.json",
-        "name":  "People\u0027s Republic of China"
-    },
-    {
-        "filename":  "juris-coe.int-map.json",
-        "name":  "Council of Europe"
-    },
-    {
-        "filename":  "juris-co-map.json",
-        "name":  "Colombia"
-    },
-    {
-        "filename":  "juris-comesa.int-map.json",
-        "name":  "Common Market for Eastern and Southern Africa"
-    },
-    {
-        "filename":  "juris-cr-map.json",
-        "name":  "Costa Rica"
-    },
-    {
-        "filename":  "juris-cs-map.json",
-        "name":  "Czechoslovakia"
-    },
-    {
-        "filename":  "juris-cu-map.json",
-        "name":  "Cuba"
-    },
-    {
-        "filename":  "juris-cv-map.json",
-        "name":  "Cape Verde"
-    },
-    {
-        "filename":  "juris-cy-map.json",
-        "name":  "Cyprus"
-    },
-    {
-        "filename":  "juris-cz-map.json",
-        "name":  "Czechia"
-    },
-    {
-        "filename":  "juris-dd-map.json",
-        "name":  "German Democratic Republic"
-    },
-    {
-        "filename":  "juris-de-map.json",
-        "name":  "Germany"
-    },
-    {
-        "filename":  "juris-dj-map.json",
-        "name":  "Djibouti"
-    },
-    {
-        "filename":  "juris-dk-map.json",
-        "name":  "Denmark"
-    },
-    {
-        "filename":  "juris-dm-map.json",
-        "name":  "Commonwealth of Dominica"
-    },
-    {
-        "filename":  "juris-do-map.json",
-        "name":  "Dominican Republic"
-    },
-    {
-        "filename":  "juris-dz-map.json",
-        "name":  "Algeria"
-    },
-    {
-        "filename":  "juris-ec.int-map.json",
-        "name":  "European Community"
-    },
-    {
-        "filename":  "juris-ec-map.json",
-        "name":  "Ecuador"
-    },
-    {
-        "filename":  "juris-eea.int-map.json",
-        "name":  "European Economic Area"
-    },
-    {
-        "filename":  "juris-eec.int-map.json",
-        "name":  "European Economic Community"
-    },
-    {
-        "filename":  "juris-ee-map.json",
-        "name":  "Estonia"
-    },
-    {
-        "filename":  "juris-eg-map.json",
-        "name":  "Egypt"
-    },
-    {
-        "filename":  "juris-eh-map.json",
-        "name":  "Western Sahara"
-    },
-    {
-        "filename":  "juris-eporg.int-map.json",
-        "name":  "Eporg.Int"
-    },
-    {
-        "filename":  "juris-er-map.json",
-        "name":  "Eritrea"
-    },
-    {
-        "filename":  "juris-es-map.json",
-        "name":  "Spain"
-    },
-    {
-        "filename":  "juris-et-map.json",
-        "name":  "Ethiopia"
-    },
-    {
-        "filename":  "juris-eu.int-map.json",
-        "name":  "European Union"
-    },
-    {
-        "filename":  "juris-fi-map.json",
-        "name":  "Finland"
-    },
-    {
-        "filename":  "juris-fj-map.json",
-        "name":  "Fiji"
-    },
-    {
-        "filename":  "juris-fm-map.json",
-        "name":  "Micronesia"
-    },
-    {
-        "filename":  "juris-fr-map.json",
-        "name":  "France"
-    },
-    {
-        "filename":  "juris-ga-map.json",
-        "name":  "Gabon"
-    },
-    {
-        "filename":  "juris-gb-map.json",
-        "name":  "United Kingdom"
-    },
-    {
-        "filename":  "juris-gd-map.json",
-        "name":  "Grenada"
-    },
-    {
-        "filename":  "juris-ge-ab-map.json",
-        "name":  "Abkhazia"
-    },
-    {
-        "filename":  "juris-ge-map.json",
-        "name":  "Georgia"
-    },
-    {
-        "filename":  "juris-gh-map.json",
-        "name":  "Ghana"
-    },
-    {
-        "filename":  "juris-gm-map.json",
-        "name":  "The Gambia"
-    },
-    {
-        "filename":  "juris-gn-map.json",
-        "name":  "Guinea"
-    },
-    {
-        "filename":  "juris-gq-map.json",
-        "name":  "Equatorial Guinea"
-    },
-    {
-        "filename":  "juris-gr-map.json",
-        "name":  "Greece"
-    },
-    {
-        "filename":  "juris-gt-map.json",
-        "name":  "Guatemala"
-    },
-    {
-        "filename":  "juris-gu-map.json",
-        "name":  "Guam"
-    },
-    {
-        "filename":  "juris-gw-map.json",
-        "name":  "Guinea-Bissau"
-    },
-    {
-        "filename":  "juris-gy-map.json",
-        "name":  "Guyana"
-    },
-    {
-        "filename":  "juris-hk-map.json",
-        "name":  "Hong Kong"
-    },
-    {
-        "filename":  "juris-hn-map.json",
-        "name":  "Honduras"
-    },
-    {
-        "filename":  "juris-hr-map.json",
-        "name":  "Croatia"
-    },
-    {
-        "filename":  "juris-ht-map.json",
-        "name":  "Haiti"
-    },
-    {
-        "filename":  "juris-hu-map.json",
-        "name":  "Hungary"
-    },
-    {
-        "filename":  "juris-icc.int-map.json",
-        "name":  "International Criminal Court"
-    },
-    {
-        "filename":  "juris-id-map.json",
-        "name":  "Indonesia"
-    },
-    {
-        "filename":  "juris-ie-map.json",
-        "name":  "Ireland"
-    },
-    {
-        "filename":  "juris-il-map.json",
-        "name":  "Israel"
-    },
-    {
-        "filename":  "juris-imf.int-map.json",
-        "name":  "International Monetary Fund"
-    },
-    {
-        "filename":  "juris-in-map.json",
-        "name":  "India"
-    },
-    {
-        "filename":  "juris-iq-map.json",
-        "name":  "Iraq"
-    },
-    {
-        "filename":  "juris-ir-map.json",
-        "name":  "Iran"
-    },
-    {
-        "filename":  "juris-is-map.json",
-        "name":  "Iceland"
-    },
-    {
-        "filename":  "juris-it-map.json",
-        "name":  "Italy"
-    },
-    {
-        "filename":  "juris-je-map.json",
-        "name":  "Jersey"
-    },
-    {
-        "filename":  "juris-jm-map.json",
-        "name":  "Jamaica"
-    },
-    {
-        "filename":  "juris-jo-map.json",
-        "name":  "Jordan"
-    },
-    {
-        "filename":  "juris-jp-map.json",
-        "name":  "Japan"
-    },
-    {
-        "filename":  "juris-ke-map.json",
-        "name":  "Kenya"
-    },
-    {
-        "filename":  "juris-kg-map.json",
-        "name":  "Kyrgyzstan"
-    },
-    {
-        "filename":  "juris-kh-map.json",
-        "name":  "Cambodia"
-    },
-    {
-        "filename":  "juris-ki-map.json",
-        "name":  "Kiribati"
-    },
-    {
-        "filename":  "juris-km-map.json",
-        "name":  "Comoros"
-    },
-    {
-        "filename":  "juris-kn-map.json",
-        "name":  "Saint Kitts and Nevis"
-    },
-    {
-        "filename":  "juris-kp-map.json",
-        "name":  "North Korea"
-    },
-    {
-        "filename":  "juris-kr-map.json",
-        "name":  "South Korea"
-    },
-    {
-        "filename":  "juris-kw-map.json",
-        "name":  "Kuwait"
-    },
-    {
-        "filename":  "juris-ky-map.json",
-        "name":  "Cayman Islands"
-    },
-    {
-        "filename":  "juris-kz-map.json",
-        "name":  "Kazakhstan"
-    },
-    {
-        "filename":  "juris-la-map.json",
-        "name":  "Lao People\u0027s Democratic Republic"
-    },
-    {
-        "filename":  "juris-lb-map.json",
-        "name":  "Lebanon"
-    },
-    {
-        "filename":  "juris-lc-map.json",
-        "name":  "Saint Lucia"
-    },
-    {
-        "filename":  "juris-li-map.json",
-        "name":  "Liechtenstein"
-    },
-    {
-        "filename":  "juris-lk-map.json",
-        "name":  "Sri Lanka"
-    },
-    {
-        "filename":  "juris-ln.int-map.json",
-        "name":  "League of Nations"
-    },
-    {
-        "filename":  "juris-lr-map.json",
-        "name":  "Liberia"
-    },
-    {
-        "filename":  "juris-ls-map.json",
-        "name":  "Lesotho"
-    },
-    {
-        "filename":  "juris-lt-map.json",
-        "name":  "Lithuania"
-    },
-    {
-        "filename":  "juris-lu-map.json",
-        "name":  "Luxembourg"
-    },
-    {
-        "filename":  "juris-lv-map.json",
-        "name":  "Latvia"
-    },
-    {
-        "filename":  "juris-ly-map.json",
-        "name":  "Libya"
-    },
-    {
-        "filename":  "juris-ma-map.json",
-        "name":  "Morocco"
-    },
-    {
-        "filename":  "juris-mc-map.json",
-        "name":  "Monaco"
-    },
-    {
-        "filename":  "juris-md-map.json",
-        "name":  "Moldova"
-    },
-    {
-        "filename":  "juris-me-map.json",
-        "name":  "Montenegro"
-    },
-    {
-        "filename":  "juris-mg-map.json",
-        "name":  "Madagascar"
-    },
-    {
-        "filename":  "juris-mh-map.json",
-        "name":  "Marshall Islands"
-    },
-    {
-        "filename":  "juris-mk-map.json",
-        "name":  "Macedonia"
-    },
-    {
-        "filename":  "juris-ml-map.json",
-        "name":  "Mali"
-    },
-    {
-        "filename":  "juris-mm-map.json",
-        "name":  "Republic of the Union of Myanmar"
-    },
-    {
-        "filename":  "juris-mn-map.json",
-        "name":  "Mongolia"
-    },
-    {
-        "filename":  "juris-mo-map.json",
-        "name":  "Macau"
-    },
-    {
-        "filename":  "juris-mr-map.json",
-        "name":  "Mauritania"
-    },
-    {
-        "filename":  "juris-mt-map.json",
-        "name":  "Malta"
-    },
-    {
-        "filename":  "juris-mu-map.json",
-        "name":  "Mauritius"
-    },
-    {
-        "filename":  "juris-mv-map.json",
-        "name":  "Maldives"
-    },
-    {
-        "filename":  "juris-mw-map.json",
-        "name":  "Malawi"
-    },
-    {
-        "filename":  "juris-mx-map.json",
-        "name":  "Mexico"
-    },
-    {
-        "filename":  "juris-my-map.json",
-        "name":  "Malaysia"
-    },
-    {
-        "filename":  "juris-mz-map.json",
-        "name":  "Mozambique"
-    },
-    {
-        "filename":  "juris-na-map.json",
-        "name":  "Namibia"
-    },
-    {
-        "filename":  "juris-ne-map.json",
-        "name":  "Niger"
-    },
-    {
-        "filename":  "juris-ng-map.json",
-        "name":  "Nigeria"
-    },
-    {
-        "filename":  "juris-ni-map.json",
-        "name":  "Nicaragua"
-    },
-    {
-        "filename":  "juris-nir-map.json",
-        "name":  "Northern Ireland"
-    },
-    {
-        "filename":  "juris-nl-map.json",
-        "name":  "Netherlands"
-    },
-    {
-        "filename":  "juris-no-map.json",
-        "name":  "Norway"
-    },
-    {
-        "filename":  "juris-np-map.json",
-        "name":  "Nepal"
-    },
-    {
-        "filename":  "juris-nr-map.json",
-        "name":  "Nauru"
-    },
-    {
-        "filename":  "juris-nu-map.json",
-        "name":  "Niue"
-    },
-    {
-        "filename":  "juris-nz-map.json",
-        "name":  "New Zealand"
-    },
-    {
-        "filename":  "juris-oas.int-map.json",
-        "name":  "Organization of American States"
-    },
-    {
-        "filename":  "juris-om-map.json",
-        "name":  "Oman"
-    },
-    {
-        "filename":  "juris-pa-map.json",
-        "name":  "Panama"
-    },
-    {
-        "filename":  "juris-pe-map.json",
-        "name":  "Peru"
-    },
-    {
-        "filename":  "juris-pg-map.json",
-        "name":  "Papua New Guinea"
-    },
-    {
-        "filename":  "juris-ph-map.json",
-        "name":  "Philippines"
-    },
-    {
-        "filename":  "juris-pk-map.json",
-        "name":  "Pakistan"
-    },
-    {
-        "filename":  "juris-pl-map.json",
-        "name":  "Poland"
-    },
-    {
-        "filename":  "juris-ps-map.json",
-        "name":  "Palestinian Territory"
-    },
-    {
-        "filename":  "juris-pt-map.json",
-        "name":  "Portugal"
-    },
-    {
-        "filename":  "juris-pw-map.json",
-        "name":  "Palau"
-    },
-    {
-        "filename":  "juris-py-map.json",
-        "name":  "Paraguay"
-    },
-    {
-        "filename":  "juris-qa-map.json",
-        "name":  "Qatar"
-    },
-    {
-        "filename":  "juris-ro-map.json",
-        "name":  "Romania"
-    },
-    {
-        "filename":  "juris-rs-map.json",
-        "name":  "Serbia"
-    },
-    {
-        "filename":  "juris-ru-map.json",
-        "name":  "Russia"
-    },
-    {
-        "filename":  "juris-rw-map.json",
-        "name":  "Rwanda"
-    },
-    {
-        "filename":  "juris-sai.int-map.json",
-        "name":  "Comunidad Andina"
-    },
-    {
-        "filename":  "juris-sa-map.json",
-        "name":  "Saudi Arabia"
-    },
-    {
-        "filename":  "juris-sb-map.json",
-        "name":  "Solomon Islands"
-    },
-    {
-        "filename":  "juris-sc-map.json",
-        "name":  "Seychelles"
-    },
-    {
-        "filename":  "juris-sd-map.json",
-        "name":  "Sudan"
-    },
-    {
-        "filename":  "juris-se-map.json",
-        "name":  "Sweden"
-    },
-    {
-        "filename":  "juris-sg-map.json",
-        "name":  "Singapore"
-    },
-    {
-        "filename":  "juris-sica.int-map.json",
-        "name":  "Sistema de la Integración Centroamericana"
-    },
-    {
-        "filename":  "juris-si-map.json",
-        "name":  "Slovenia"
-    },
-    {
-        "filename":  "juris-sk-map.json",
-        "name":  "Slovakia"
-    },
-    {
-        "filename":  "juris-sl-map.json",
-        "name":  "Sierra Leone"
-    },
-    {
-        "filename":  "juris-sm-map.json",
-        "name":  "San Marino"
-    },
-    {
-        "filename":  "juris-sn-map.json",
-        "name":  "Senegal"
-    },
-    {
-        "filename":  "juris-so-map.json",
-        "name":  "Somalia"
-    },
-    {
-        "filename":  "juris-sr-map.json",
-        "name":  "Suriname"
-    },
-    {
-        "filename":  "juris-st-map.json",
-        "name":  "São Tomé and Príncipe"
-    },
-    {
-        "filename":  "juris-sv-map.json",
-        "name":  "El Salvador"
-    },
-    {
-        "filename":  "juris-sy-map.json",
-        "name":  "Syria"
-    },
-    {
-        "filename":  "juris-sz-map.json",
-        "name":  "Swaziland"
-    },
-    {
-        "filename":  "juris-td-map.json",
-        "name":  "Chad"
-    },
-    {
-        "filename":  "juris-tg-map.json",
-        "name":  "Togo"
-    },
-    {
-        "filename":  "juris-th-map.json",
-        "name":  "Thailand"
-    },
-    {
-        "filename":  "juris-tj-map.json",
-        "name":  "Tajikistan"
-    },
-    {
-        "filename":  "juris-tl-map.json",
-        "name":  "Timor-Leste"
-    },
-    {
-        "filename":  "juris-tm-map.json",
-        "name":  "Turkmenistan"
-    },
-    {
-        "filename":  "juris-tn-map.json",
-        "name":  "Tunisia"
-    },
-    {
-        "filename":  "juris-to-map.json",
-        "name":  "Tonga"
-    },
-    {
-        "filename":  "juris-tr-map.json",
-        "name":  "Turkey"
-    },
-    {
-        "filename":  "juris-tt-map.json",
-        "name":  "Trinidad and Tobago"
-    },
-    {
-        "filename":  "juris-tv-map.json",
-        "name":  "Tuvalu"
-    },
-    {
-        "filename":  "juris-tw-map.json",
-        "name":  "Republic of China"
-    },
-    {
-        "filename":  "juris-tz-map.json",
-        "name":  "Tanzania"
-    },
-    {
-        "filename":  "juris-ua-map.json",
-        "name":  "Ukraine"
-    },
-    {
-        "filename":  "juris-ug-map.json",
-        "name":  "Uganda"
-    },
-    {
-        "filename":  "juris-un.int-map.json",
-        "name":  "United Nations"
-    },
-    {
-        "filename":  "juris-us-map.json",
-        "name":  "United States"
-    },
-    {
-        "filename":  "juris-ussr-map.json",
-        "name":  "Union of Soviet Socialist Republics"
-    },
-    {
-        "filename":  "juris-uy-map.json",
-        "name":  "Uruguay"
-    },
-    {
-        "filename":  "juris-uz-map.json",
-        "name":  "Uzbekistan"
-    },
-    {
-        "filename":  "juris-va-map.json",
-        "name":  "Vatican City"
-    },
-    {
-        "filename":  "juris-vc-map.json",
-        "name":  "Saint Vincent and the Grenadines"
-    },
-    {
-        "filename":  "juris-ve-map.json",
-        "name":  "Venezuela"
-    },
-    {
-        "filename":  "juris-vg-map.json",
-        "name":  "British Virgin Islands"
-    },
-    {
-        "filename":  "juris-vn-map.json",
-        "name":  "Vietnam"
-    },
-    {
-        "filename":  "juris-vu-map.json",
-        "name":  "Vanuatu"
-    },
-    {
-        "filename":  "juris-wbg.int-map.json",
-        "name":  "World Bank Group"
-    },
-    {
-        "filename":  "juris-ws-map.json",
-        "name":  "Samoa"
-    },
-    {
-        "filename":  "juris-wto.int-map.json",
-        "name":  "World Trade Organization"
-    },
-    {
-        "filename":  "juris-xk-map.json",
-        "name":  "Kosovo"
-    },
-    {
-        "filename":  "juris-ye-map.json",
-        "name":  "Yemen"
-    },
-    {
-        "filename":  "juris-yu-map.json",
-        "name":  "Yugoslavia"
-    },
-    {
-        "filename":  "juris-za-map.json",
-        "name":  "South Africa"
-    },
-    {
-        "filename":  "juris-zm-map.json",
-        "name":  "Zambia"
-    },
-    {
-        "filename":  "juris-zw-map.json",
-        "name":  "Zimbabwe"
-    },
-    {
-        "filename":  "juris-zz-map.json",
-        "name":  "Laputa"
-    }
+  {
+    "filename": "juris-ad-map.json",
+    "name": "Andorra"
+  },
+  {
+    "filename": "juris-ae-map.json",
+    "name": "United Arab Emirates"
+  },
+  {
+    "filename": "juris-af-map.json",
+    "name": "Afghanistan"
+  },
+  {
+    "filename": "juris-ag-map.json",
+    "name": "Antigua and Barbuda"
+  },
+  {
+    "filename": "juris-ai-map.json",
+    "name": "Anguilla"
+  },
+  {
+    "filename": "juris-al-map.json",
+    "name": "Albania"
+  },
+  {
+    "filename": "juris-am-map.json",
+    "name": "Armenia"
+  },
+  {
+    "filename": "juris-ao-map.json",
+    "name": "Angola"
+  },
+  {
+    "filename": "juris-ar-map.json",
+    "name": "Argentina"
+  },
+  {
+    "filename": "juris-arb.cls-map.json",
+    "name": "Arbitrations"
+  },
+  {
+    "filename": "juris-at-map.json",
+    "name": "Austria"
+  },
+  {
+    "filename": "juris-au-map.json",
+    "name": "Australia"
+  },
+  {
+    "filename": "juris-au.int-map.json",
+    "name": "African Union"
+  },
+  {
+    "filename": "juris-az-map.json",
+    "name": "Azerbaijan"
+  },
+  {
+    "filename": "juris-ba-map.json",
+    "name": "Sprska"
+  },
+  {
+    "filename": "juris-bb-map.json",
+    "name": "Barbados"
+  },
+  {
+    "filename": "juris-bd-map.json",
+    "name": "Bangladesh"
+  },
+  {
+    "filename": "juris-be-map.json",
+    "name": "België"
+  },
+  {
+    "filename": "juris-bf-map.json",
+    "name": "Burkina Faso"
+  },
+  {
+    "filename": "juris-bg-map.json",
+    "name": "Bulgaria"
+  },
+  {
+    "filename": "juris-bh-map.json",
+    "name": "Bahrain"
+  },
+  {
+    "filename": "juris-bi-map.json",
+    "name": "Burundi"
+  },
+  {
+    "filename": "juris-bj-map.json",
+    "name": "Benin"
+  },
+  {
+    "filename": "juris-bn-map.json",
+    "name": "Brunei"
+  },
+  {
+    "filename": "juris-bo-map.json",
+    "name": "Bolivia"
+  },
+  {
+    "filename": "juris-br-map.json",
+    "name": "Brazil"
+  },
+  {
+    "filename": "juris-bs-map.json",
+    "name": "The Bahamas"
+  },
+  {
+    "filename": "juris-bt-map.json",
+    "name": "Bhutan"
+  },
+  {
+    "filename": "juris-bw-map.json",
+    "name": "Botswana"
+  },
+  {
+    "filename": "juris-by-map.json",
+    "name": "Belarus"
+  },
+  {
+    "filename": "juris-bz-map.json",
+    "name": "Belize"
+  },
+  {
+    "filename": "juris-ca-map.json",
+    "name": "Canada"
+  },
+  {
+    "filename": "juris-cd-map.json",
+    "name": "Dem. Rep. of the Congo"
+  },
+  {
+    "filename": "juris-cf-map.json",
+    "name": "Central African Republic"
+  },
+  {
+    "filename": "juris-cg-map.json",
+    "name": "Rep. of the Congo"
+  },
+  {
+    "filename": "juris-ch-map.json",
+    "name": "Switzerland"
+  },
+  {
+    "filename": "juris-ci-map.json",
+    "name": "Côte d'Ivoire"
+  },
+  {
+    "filename": "juris-ck-map.json",
+    "name": "Cook Islands"
+  },
+  {
+    "filename": "juris-cl-map.json",
+    "name": "Chile"
+  },
+  {
+    "filename": "juris-cm-map.json",
+    "name": "Cameroon"
+  },
+  {
+    "filename": "juris-cn-map.json",
+    "name": "People's Republic of China"
+  },
+  {
+    "filename": "juris-co-map.json",
+    "name": "Colombia"
+  },
+  {
+    "filename": "juris-coe.int-map.json",
+    "name": "Council of Europe"
+  },
+  {
+    "filename": "juris-comesa.int-map.json",
+    "name": "Common Market for Eastern and Southern Africa"
+  },
+  {
+    "filename": "juris-cr-map.json",
+    "name": "Costa Rica"
+  },
+  {
+    "filename": "juris-cs-map.json",
+    "name": "Czechoslovakia"
+  },
+  {
+    "filename": "juris-cu-map.json",
+    "name": "Cuba"
+  },
+  {
+    "filename": "juris-cv-map.json",
+    "name": "Cape Verde"
+  },
+  {
+    "filename": "juris-cy-map.json",
+    "name": "Cyprus"
+  },
+  {
+    "filename": "juris-cz-map.json",
+    "name": "Czechia"
+  },
+  {
+    "filename": "juris-dd-map.json",
+    "name": "German Democratic Republic"
+  },
+  {
+    "filename": "juris-de-map.json",
+    "name": "Germany"
+  },
+  {
+    "filename": "juris-dj-map.json",
+    "name": "Djibouti"
+  },
+  {
+    "filename": "juris-dk-map.json",
+    "name": "Denmark"
+  },
+  {
+    "filename": "juris-dm-map.json",
+    "name": "Commonwealth of Dominica"
+  },
+  {
+    "filename": "juris-do-map.json",
+    "name": "Dominican Republic"
+  },
+  {
+    "filename": "juris-dz-map.json",
+    "name": "Algeria"
+  },
+  {
+    "filename": "juris-ec-map.json",
+    "name": "Ecuador"
+  },
+  {
+    "filename": "juris-ec.int-map.json",
+    "name": "European Community"
+  },
+  {
+    "filename": "juris-ee-map.json",
+    "name": "Estonia"
+  },
+  {
+    "filename": "juris-eea.int-map.json",
+    "name": "European Economic Area"
+  },
+  {
+    "filename": "juris-eec.int-map.json",
+    "name": "European Economic Community"
+  },
+  {
+    "filename": "juris-eg-map.json",
+    "name": "Egypt"
+  },
+  {
+    "filename": "juris-eh-map.json",
+    "name": "Western Sahara"
+  },
+  {
+    "filename": "juris-eporg.int-map.json",
+    "name": "Eporg.Int"
+  },
+  {
+    "filename": "juris-er-map.json",
+    "name": "Eritrea"
+  },
+  {
+    "filename": "juris-es-map.json",
+    "name": "Spain"
+  },
+  {
+    "filename": "juris-et-map.json",
+    "name": "Ethiopia"
+  },
+  {
+    "filename": "juris-eu.int-map.json",
+    "name": "European Union"
+  },
+  {
+    "filename": "juris-fi-map.json",
+    "name": "Finland"
+  },
+  {
+    "filename": "juris-fj-map.json",
+    "name": "Fiji"
+  },
+  {
+    "filename": "juris-fm-map.json",
+    "name": "Micronesia"
+  },
+  {
+    "filename": "juris-fr-map.json",
+    "name": "France"
+  },
+  {
+    "filename": "juris-ga-map.json",
+    "name": "Gabon"
+  },
+  {
+    "filename": "juris-gb-map.json",
+    "name": "United Kingdom"
+  },
+  {
+    "filename": "juris-gd-map.json",
+    "name": "Grenada"
+  },
+  {
+    "filename": "juris-ge-ab-map.json",
+    "name": "Abkhazia"
+  },
+  {
+    "filename": "juris-ge-map.json",
+    "name": "Georgia"
+  },
+  {
+    "filename": "juris-gh-map.json",
+    "name": "Ghana"
+  },
+  {
+    "filename": "juris-gm-map.json",
+    "name": "The Gambia"
+  },
+  {
+    "filename": "juris-gn-map.json",
+    "name": "Guinea"
+  },
+  {
+    "filename": "juris-gq-map.json",
+    "name": "Equatorial Guinea"
+  },
+  {
+    "filename": "juris-gr-map.json",
+    "name": "Greece"
+  },
+  {
+    "filename": "juris-gt-map.json",
+    "name": "Guatemala"
+  },
+  {
+    "filename": "juris-gu-map.json",
+    "name": "Guam"
+  },
+  {
+    "filename": "juris-gw-map.json",
+    "name": "Guinea-Bissau"
+  },
+  {
+    "filename": "juris-gy-map.json",
+    "name": "Guyana"
+  },
+  {
+    "filename": "juris-hk-map.json",
+    "name": "Hong Kong"
+  },
+  {
+    "filename": "juris-hn-map.json",
+    "name": "Honduras"
+  },
+  {
+    "filename": "juris-hr-map.json",
+    "name": "Croatia"
+  },
+  {
+    "filename": "juris-ht-map.json",
+    "name": "Haiti"
+  },
+  {
+    "filename": "juris-hu-map.json",
+    "name": "Hungary"
+  },
+  {
+    "filename": "juris-icc.int-map.json",
+    "name": "International Criminal Court"
+  },
+  {
+    "filename": "juris-id-map.json",
+    "name": "Indonesia"
+  },
+  {
+    "filename": "juris-ie-map.json",
+    "name": "Ireland"
+  },
+  {
+    "filename": "juris-il-map.json",
+    "name": "Israel"
+  },
+  {
+    "filename": "juris-imf.int-map.json",
+    "name": "International Monetary Fund"
+  },
+  {
+    "filename": "juris-in-map.json",
+    "name": "India"
+  },
+  {
+    "filename": "juris-iq-map.json",
+    "name": "Iraq"
+  },
+  {
+    "filename": "juris-ir-map.json",
+    "name": "Iran"
+  },
+  {
+    "filename": "juris-is-map.json",
+    "name": "Iceland"
+  },
+  {
+    "filename": "juris-it-map.json",
+    "name": "Italy"
+  },
+  {
+    "filename": "juris-je-map.json",
+    "name": "Jersey"
+  },
+  {
+    "filename": "juris-jm-map.json",
+    "name": "Jamaica"
+  },
+  {
+    "filename": "juris-jo-map.json",
+    "name": "Jordan"
+  },
+  {
+    "filename": "juris-jp-map.json",
+    "name": "Japan"
+  },
+  {
+    "filename": "juris-ke-map.json",
+    "name": "Kenya"
+  },
+  {
+    "filename": "juris-kg-map.json",
+    "name": "Kyrgyzstan"
+  },
+  {
+    "filename": "juris-kh-map.json",
+    "name": "Cambodia"
+  },
+  {
+    "filename": "juris-ki-map.json",
+    "name": "Kiribati"
+  },
+  {
+    "filename": "juris-km-map.json",
+    "name": "Comoros"
+  },
+  {
+    "filename": "juris-kn-map.json",
+    "name": "Saint Kitts and Nevis"
+  },
+  {
+    "filename": "juris-kp-map.json",
+    "name": "North Korea"
+  },
+  {
+    "filename": "juris-kr-map.json",
+    "name": "South Korea"
+  },
+  {
+    "filename": "juris-kw-map.json",
+    "name": "Kuwait"
+  },
+  {
+    "filename": "juris-ky-map.json",
+    "name": "Cayman Islands"
+  },
+  {
+    "filename": "juris-kz-map.json",
+    "name": "Kazakhstan"
+  },
+  {
+    "filename": "juris-la-map.json",
+    "name": "Lao People's Democratic Republic"
+  },
+  {
+    "filename": "juris-lb-map.json",
+    "name": "Lebanon"
+  },
+  {
+    "filename": "juris-lc-map.json",
+    "name": "Saint Lucia"
+  },
+  {
+    "filename": "juris-li-map.json",
+    "name": "Liechtenstein"
+  },
+  {
+    "filename": "juris-lk-map.json",
+    "name": "Sri Lanka"
+  },
+  {
+    "filename": "juris-ln.int-map.json",
+    "name": "League of Nations"
+  },
+  {
+    "filename": "juris-lr-map.json",
+    "name": "Liberia"
+  },
+  {
+    "filename": "juris-ls-map.json",
+    "name": "Lesotho"
+  },
+  {
+    "filename": "juris-lt-map.json",
+    "name": "Lithuania"
+  },
+  {
+    "filename": "juris-lu-map.json",
+    "name": "Luxembourg"
+  },
+  {
+    "filename": "juris-lv-map.json",
+    "name": "Latvia"
+  },
+  {
+    "filename": "juris-ly-map.json",
+    "name": "Libya"
+  },
+  {
+    "filename": "juris-ma-map.json",
+    "name": "Morocco"
+  },
+  {
+    "filename": "juris-mc-map.json",
+    "name": "Monaco"
+  },
+  {
+    "filename": "juris-md-map.json",
+    "name": "Moldova"
+  },
+  {
+    "filename": "juris-me-map.json",
+    "name": "Montenegro"
+  },
+  {
+    "filename": "juris-mg-map.json",
+    "name": "Madagascar"
+  },
+  {
+    "filename": "juris-mh-map.json",
+    "name": "Marshall Islands"
+  },
+  {
+    "filename": "juris-mk-map.json",
+    "name": "Macedonia"
+  },
+  {
+    "filename": "juris-ml-map.json",
+    "name": "Mali"
+  },
+  {
+    "filename": "juris-mm-map.json",
+    "name": "Republic of the Union of Myanmar"
+  },
+  {
+    "filename": "juris-mn-map.json",
+    "name": "Mongolia"
+  },
+  {
+    "filename": "juris-mo-map.json",
+    "name": "Macau"
+  },
+  {
+    "filename": "juris-mr-map.json",
+    "name": "Mauritania"
+  },
+  {
+    "filename": "juris-mt-map.json",
+    "name": "Malta"
+  },
+  {
+    "filename": "juris-mu-map.json",
+    "name": "Mauritius"
+  },
+  {
+    "filename": "juris-mv-map.json",
+    "name": "Maldives"
+  },
+  {
+    "filename": "juris-mw-map.json",
+    "name": "Malawi"
+  },
+  {
+    "filename": "juris-mx-map.json",
+    "name": "Mexico"
+  },
+  {
+    "filename": "juris-my-map.json",
+    "name": "Malaysia"
+  },
+  {
+    "filename": "juris-mz-map.json",
+    "name": "Mozambique"
+  },
+  {
+    "filename": "juris-na-map.json",
+    "name": "Namibia"
+  },
+  {
+    "filename": "juris-ne-map.json",
+    "name": "Niger"
+  },
+  {
+    "filename": "juris-ng-map.json",
+    "name": "Nigeria"
+  },
+  {
+    "filename": "juris-ni-map.json",
+    "name": "Nicaragua"
+  },
+  {
+    "filename": "juris-nir-map.json",
+    "name": "Northern Ireland"
+  },
+  {
+    "filename": "juris-nl-map.json",
+    "name": "Netherlands"
+  },
+  {
+    "filename": "juris-no-map.json",
+    "name": "Norway"
+  },
+  {
+    "filename": "juris-np-map.json",
+    "name": "Nepal"
+  },
+  {
+    "filename": "juris-nr-map.json",
+    "name": "Nauru"
+  },
+  {
+    "filename": "juris-nu-map.json",
+    "name": "Niue"
+  },
+  {
+    "filename": "juris-nz-map.json",
+    "name": "New Zealand"
+  },
+  {
+    "filename": "juris-oas.int-map.json",
+    "name": "Organization of American States"
+  },
+  {
+    "filename": "juris-om-map.json",
+    "name": "Oman"
+  },
+  {
+    "filename": "juris-pa-map.json",
+    "name": "Panama"
+  },
+  {
+    "filename": "juris-pe-map.json",
+    "name": "Peru"
+  },
+  {
+    "filename": "juris-pg-map.json",
+    "name": "Papua New Guinea"
+  },
+  {
+    "filename": "juris-ph-map.json",
+    "name": "Philippines"
+  },
+  {
+    "filename": "juris-pk-map.json",
+    "name": "Pakistan"
+  },
+  {
+    "filename": "juris-pl-map.json",
+    "name": "Poland"
+  },
+  {
+    "filename": "juris-ps-map.json",
+    "name": "Palestinian Territory"
+  },
+  {
+    "filename": "juris-pt-map.json",
+    "name": "Portugal"
+  },
+  {
+    "filename": "juris-pw-map.json",
+    "name": "Palau"
+  },
+  {
+    "filename": "juris-py-map.json",
+    "name": "Paraguay"
+  },
+  {
+    "filename": "juris-qa-map.json",
+    "name": "Qatar"
+  },
+  {
+    "filename": "juris-ro-map.json",
+    "name": "Romania"
+  },
+  {
+    "filename": "juris-rs-map.json",
+    "name": "Serbia"
+  },
+  {
+    "filename": "juris-ru-map.json",
+    "name": "Russia"
+  },
+  {
+    "filename": "juris-rw-map.json",
+    "name": "Rwanda"
+  },
+  {
+    "filename": "juris-sa-map.json",
+    "name": "Saudi Arabia"
+  },
+  {
+    "filename": "juris-sai.int-map.json",
+    "name": "Comunidad Andina"
+  },
+  {
+    "filename": "juris-sb-map.json",
+    "name": "Solomon Islands"
+  },
+  {
+    "filename": "juris-sc-map.json",
+    "name": "Seychelles"
+  },
+  {
+    "filename": "juris-sd-map.json",
+    "name": "Sudan"
+  },
+  {
+    "filename": "juris-se-map.json",
+    "name": "Sweden"
+  },
+  {
+    "filename": "juris-sg-map.json",
+    "name": "Singapore"
+  },
+  {
+    "filename": "juris-si-map.json",
+    "name": "Slovenia"
+  },
+  {
+    "filename": "juris-sica.int-map.json",
+    "name": "Sistema de la Integración Centroamericana"
+  },
+  {
+    "filename": "juris-sk-map.json",
+    "name": "Slovakia"
+  },
+  {
+    "filename": "juris-sl-map.json",
+    "name": "Sierra Leone"
+  },
+  {
+    "filename": "juris-sm-map.json",
+    "name": "San Marino"
+  },
+  {
+    "filename": "juris-sn-map.json",
+    "name": "Senegal"
+  },
+  {
+    "filename": "juris-so-map.json",
+    "name": "Somalia"
+  },
+  {
+    "filename": "juris-sr-map.json",
+    "name": "Suriname"
+  },
+  {
+    "filename": "juris-st-map.json",
+    "name": "São Tomé and Príncipe"
+  },
+  {
+    "filename": "juris-sv-map.json",
+    "name": "El Salvador"
+  },
+  {
+    "filename": "juris-sy-map.json",
+    "name": "Syria"
+  },
+  {
+    "filename": "juris-sz-map.json",
+    "name": "Swaziland"
+  },
+  {
+    "filename": "juris-td-map.json",
+    "name": "Chad"
+  },
+  {
+    "filename": "juris-tg-map.json",
+    "name": "Togo"
+  },
+  {
+    "filename": "juris-th-map.json",
+    "name": "Thailand"
+  },
+  {
+    "filename": "juris-tj-map.json",
+    "name": "Tajikistan"
+  },
+  {
+    "filename": "juris-tl-map.json",
+    "name": "Timor-Leste"
+  },
+  {
+    "filename": "juris-tm-map.json",
+    "name": "Turkmenistan"
+  },
+  {
+    "filename": "juris-tn-map.json",
+    "name": "Tunisia"
+  },
+  {
+    "filename": "juris-to-map.json",
+    "name": "Tonga"
+  },
+  {
+    "filename": "juris-tr-map.json",
+    "name": "Turkey"
+  },
+  {
+    "filename": "juris-tt-map.json",
+    "name": "Trinidad and Tobago"
+  },
+  {
+    "filename": "juris-tv-map.json",
+    "name": "Tuvalu"
+  },
+  {
+    "filename": "juris-tw-map.json",
+    "name": "Republic of China"
+  },
+  {
+    "filename": "juris-tz-map.json",
+    "name": "Tanzania"
+  },
+  {
+    "filename": "juris-ua-map.json",
+    "name": "Ukraine"
+  },
+  {
+    "filename": "juris-ug-map.json",
+    "name": "Uganda"
+  },
+  {
+    "filename": "juris-un.int-map.json",
+    "name": "United Nations"
+  },
+  {
+    "filename": "juris-us-map.json",
+    "name": "United States"
+  },
+  {
+    "filename": "juris-ussr-map.json",
+    "name": "Union of Soviet Socialist Republics"
+  },
+  {
+    "filename": "juris-uy-map.json",
+    "name": "Uruguay"
+  },
+  {
+    "filename": "juris-uz-map.json",
+    "name": "Uzbekistan"
+  },
+  {
+    "filename": "juris-va-map.json",
+    "name": "Vatican City"
+  },
+  {
+    "filename": "juris-vc-map.json",
+    "name": "Saint Vincent and the Grenadines"
+  },
+  {
+    "filename": "juris-ve-map.json",
+    "name": "Venezuela"
+  },
+  {
+    "filename": "juris-vg-map.json",
+    "name": "British Virgin Islands"
+  },
+  {
+    "filename": "juris-vn-map.json",
+    "name": "Vietnam"
+  },
+  {
+    "filename": "juris-vu-map.json",
+    "name": "Vanuatu"
+  },
+  {
+    "filename": "juris-wbg.int-map.json",
+    "name": "World Bank Group"
+  },
+  {
+    "filename": "juris-ws-map.json",
+    "name": "Samoa"
+  },
+  {
+    "filename": "juris-wto.int-map.json",
+    "name": "World Trade Organization"
+  },
+  {
+    "filename": "juris-xk-map.json",
+    "name": "Kosovo"
+  },
+  {
+    "filename": "juris-ye-map.json",
+    "name": "Yemen"
+  },
+  {
+    "filename": "juris-yu-map.json",
+    "name": "Yugoslavia"
+  },
+  {
+    "filename": "juris-za-map.json",
+    "name": "South Africa"
+  },
+  {
+    "filename": "juris-zm-map.json",
+    "name": "Zambia"
+  },
+  {
+    "filename": "juris-zw-map.json",
+    "name": "Zimbabwe"
+  },
+  {
+    "filename": "juris-zz-map.json",
+    "name": "Laputa"
+  }
 ]

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "citation-phoenix",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "CSL-M module loading + Juris-M-style abbreviations for  legal citations.",
   "author": "Michael Risch",
   "icons": { "48": "content/ui/icon48.svg" },

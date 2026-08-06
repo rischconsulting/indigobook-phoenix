@@ -1,7 +1,7 @@
 {
   "filename": "auto-de-enIBFD.json",
   "name": "Germany",
-  "version": "2026-07-22 20:44:52 UTC",
+  "version": "2026-08-06 16:17:03 UTC",
   "xdata": {
     "default": {
       "place": {
@@ -875,7 +875,9 @@
         "DE:THURINGEN:MUHLHAUSEN:SONDERSHAUSEN": "Sondershausen",
         "DE:THURINGEN:NORDHAUSEN": "Nordhausen",
         "DE:THURINGEN:SUHL": "Suhl",
-        "DE:THURINGEN:WEIMAR": "Weimar"
+        "DE:THURINGEN:WEIMAR": "Weimar",
+        "DE:VOR1945": "vor 1945",
+        "DE:VOR1945:PREUSSEN": "Pr"
       }
     },
     "de": {
@@ -8389,6 +8391,24 @@
       },
       "institution-entire": {
         "vg": "VG Weimar"
+      }
+    },
+    "de:vor1945": {
+      "institution-part": {
+        "rg": "Reichsgericht",
+        "rohg": "Reichsoberhandelsgericht"
+      },
+      "institution-entire": {
+        "rg": "RG",
+        "rohg": "ROHG"
+      }
+    },
+    "de:vor1945:preussen": {
+      "institution-part": {
+        "otrib": "Pr Obertribunal"
+      },
+      "institution-entire": {
+        "otrib": "PrObTr"
       }
     }
   }
