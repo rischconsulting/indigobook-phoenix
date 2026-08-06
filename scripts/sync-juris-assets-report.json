@@ -1,46 +1,17 @@
-{
-  "generatedAt": "2026-07-28T12:11:55.1788150-04:00",
-  "overwriteLocalOnConflict": true,
-  "backupRoot": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260728-121117",
-  "summary": {
-    "preservedLocal": 0,
-    "replacedWithUpstream": 4,
-    "dateMetadataOnly": 0,
-    "total": 4
-  },
-  "dateMetadataOnly": [],
-  "conflicts": [
-    {
-      "label": "styles",
-      "relativePath": "jm-azr-erstzitat-kurz-mit-verzeichnissen.csl",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\styles\\jm-azr-erstzitat-kurz-mit-verzeichnissen.csl",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\styles\\jm-azr-erstzitat-kurz-mit-verzeichnissen.csl",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260728-121117\\styles\\jm-azr-erstzitat-kurz-mit-verzeichnissen.csl"
-    },
-    {
-      "label": "styles",
-      "relativePath": "jm-azr.csl",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\styles\\jm-azr.csl",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\styles\\jm-azr.csl",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260728-121117\\styles\\jm-azr.csl"
-    },
-    {
-      "label": "styles",
-      "relativePath": "jm-leg-cit-erstzitat-kurz.csl",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\styles\\jm-leg-cit-erstzitat-kurz.csl",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\styles\\jm-leg-cit-erstzitat-kurz.csl",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260728-121117\\styles\\jm-leg-cit-erstzitat-kurz.csl"
-    },
-    {
-      "label": "styles",
-      "relativePath": "jm-leg-cit.csl",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\styles\\jm-leg-cit.csl",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\styles\\jm-leg-cit.csl",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260728-121117\\styles\\jm-leg-cit.csl"
-    }
-  ]
+﻿{
+    "generatedAt":  "2026-07-30T13:41:04.1892430-04:00",
+    "overwriteLocalOnConflict":  true,
+    "backupRoot":  "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260730-134052",
+    "summary":  {
+                    "preservedLocal":  0,
+                    "replacedWithUpstream":  0,
+                    "dateMetadataOnly":  0,
+                    "total":  0
+                },
+    "dateMetadataOnly":  [
+
+                         ],
+    "conflicts":  [
+
+                  ]
 }
