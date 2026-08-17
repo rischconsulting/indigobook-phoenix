@@ -1,78 +1,17 @@
-{
-  "generatedAt": "2026-08-06T12:17:23.5053881-04:00",
-  "overwriteLocalOnConflict": true,
-  "backupRoot": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646",
-  "summary": {
-    "preservedLocal": 0,
-    "replacedWithUpstream": 8,
-    "dateMetadataOnly": 0,
-    "total": 8
-  },
-  "dateMetadataOnly": [],
-  "conflicts": [
-    {
-      "label": "juris-maps",
-      "relativePath": "juris-at-map.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-maps\\juris-at-map.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-maps\\juris-at-map.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-maps\\juris-at-map.json"
-    },
-    {
-      "label": "juris-maps",
-      "relativePath": "juris-de-map.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-maps\\juris-de-map.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-maps\\juris-de-map.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-maps\\juris-de-map.json"
-    },
-    {
-      "label": "juris-maps",
-      "relativePath": "versions.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-maps\\versions.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-maps\\versions.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-maps\\versions.json"
-    },
-    {
-      "label": "juris-abbrevs-auto",
-      "relativePath": "auto-at-enIBFD.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-abbrevs\\auto-at-enIBFD.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-abbrevs\\auto-at-enIBFD.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-abbrevs-auto\\auto-at-enIBFD.json"
-    },
-    {
-      "label": "juris-abbrevs-auto",
-      "relativePath": "auto-at.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-abbrevs\\auto-at.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-abbrevs\\auto-at.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-abbrevs-auto\\auto-at.json"
-    },
-    {
-      "label": "juris-abbrevs-auto",
-      "relativePath": "auto-de-deAlt.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-abbrevs\\auto-de-deAlt.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-abbrevs\\auto-de-deAlt.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-abbrevs-auto\\auto-de-deAlt.json"
-    },
-    {
-      "label": "juris-abbrevs-auto",
-      "relativePath": "auto-de-enIBFD.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-abbrevs\\auto-de-enIBFD.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-abbrevs\\auto-de-enIBFD.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-abbrevs-auto\\auto-de-enIBFD.json"
-    },
-    {
-      "label": "juris-abbrevs-auto",
-      "relativePath": "auto-de.json",
-      "resolution": "replaced-with-upstream",
-      "destinationPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\juris-abbrevs\\auto-de.json",
-      "sourcePath": "C:\\Users\\mrisch\\AppData\\Local\\indigo-phoenix\\juris-source-cache\\legal-resource-registry-build\\juris-abbrevs\\auto-de.json",
-      "backupPath": "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260806-121646\\juris-abbrevs-auto\\auto-de.json"
-    }
-  ]
+﻿{
+    "generatedAt":  "2026-08-17T13:44:08.4422388-04:00",
+    "overwriteLocalOnConflict":  true,
+    "backupRoot":  "C:\\indigo-phoenix\\indigobook-cslm-0.2.0\\scripts\\sync-juris-assets-backup\\20260817-134354",
+    "summary":  {
+                    "preservedLocal":  0,
+                    "replacedWithUpstream":  0,
+                    "dateMetadataOnly":  0,
+                    "total":  0
+                },
+    "dateMetadataOnly":  [
+
+                         ],
+    "conflicts":  [
+
+                  ]
 }

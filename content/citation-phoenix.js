@@ -3077,11 +3077,25 @@ ${mlzBlock}` : mlzBlock;
     _refreshInfoBoxAfterRender(infoBox) {
       if (!infoBox) return;
       if (this._isEditingInInfoBox(infoBox)) {
-        this._deferActiveInfoPaneRefreshUntilBlur(infoBox, false);
         try {
           Zotero.debug("[Citation Phoenix] info-box render augmentation deferred while editor is active");
         } catch (e) {
         }
+        setTimeout(() => {
+          const activeInfoBox = this._getActiveInfoBox?.();
+          if (activeInfoBox !== infoBox) return;
+          if (this._isEditingInInfoBox(infoBox)) {
+            try {
+              this._ensureExtraPersonMenuItems(infoBox);
+              this._removeCommenterField(infoBox);
+              this._renderExtraPersonCreatorRows(infoBox);
+              this._refreshCustomInfoRows(infoBox, { preserveLayout: true });
+            } catch (e) {
+            }
+            return;
+          }
+          this._refreshInfoBoxAfterRender(infoBox);
+        }, 0);
         return;
       }
       this._ensureExtraPersonMenuItems(infoBox);
@@ -3160,13 +3174,15 @@ ${mlzBlock}` : mlzBlock;
     }
     _refreshRegisteredInfoRows() {
     }
-    _refreshCustomInfoRows(infoBox) {
+    _refreshCustomInfoRows(infoBox, options = {}) {
       if (!infoBox) return;
+      const preserveLayout = !!options.preserveLayout;
       this._renderItemTypeField(infoBox);
       this._renderJurisdictionField(infoBox);
       this._renderCourtField(infoBox);
-      this._renderSchemaFieldRows(infoBox);
-      this._renderCustomCourtField(infoBox);
+      this._renderSchemaFieldRows(infoBox, { preserveLayout });
+      this._renderCustomCourtField(infoBox, { preserveLayout });
+      if (preserveLayout) return;
       this._watchSchemaSequence(infoBox);
       this._scheduleInitialSchemaSequenceRetry(infoBox);
     }
@@ -3649,7 +3665,7 @@ ${mlzBlock}` : mlzBlock;
       }
       this._updateCourtRow(infoBox, row, item);
     }
-    _renderCustomCourtField(infoBox) {
+    _renderCustomCourtField(infoBox, options = {}) {
       const item = infoBox?.item;
       const itemTypeName = item ? Zotero?.ItemTypes?.getName?.(item.itemTypeID) : null;
       const courtRow = this._findInfoFieldRow(infoBox, "court");
@@ -3664,7 +3680,9 @@ ${mlzBlock}` : mlzBlock;
       const table = this._getInfoTable(infoBox);
       if (!table) return;
       const row = this._getOrCreateCustomCourtRow(infoBox);
-      if (courtRow.parentNode === table) {
+      if (options.preserveLayout) {
+        if (row.parentNode !== table) table.appendChild(row);
+      } else if (courtRow.parentNode === table) {
         const afterCourt = courtRow.nextSibling;
         if (afterCourt !== row) table.insertBefore(row, afterCourt);
       } else if (row.parentNode !== table) {
@@ -4869,26 +4887,28 @@ ${mlzBlock}` : mlzBlock;
       }
       throw new Error(`Unable to set native item type to ${target}`);
     }
-    _renderSchemaFieldRows(infoBox) {
+    _renderSchemaFieldRows(infoBox, options = {}) {
       const item = infoBox?.item;
       if (!item || item.deleted) {
         this._cleanupRegisteredSchemaInfoRows(infoBox);
         return;
       }
-      this._removeSchemaFieldRows(infoBox);
-      this._resetSchemaHiddenBaseRows(infoBox);
+      if (!options.preserveLayout) {
+        this._removeSchemaFieldRows(infoBox);
+        this._resetSchemaHiddenBaseRows(infoBox);
+      }
       const table = this._getInfoTable(infoBox);
       if (!table) return;
       const itemTypeName = this._getItemTypeName(item);
       const definitions = this.schemaConfig?.getFieldDefinitionsForItemType?.(itemTypeName) || [];
       for (const definition of definitions) {
         if (!this._shouldUseSchemaInfoRow(item, definition)) continue;
+        if (options.preserveLayout && this._findSchemaInfoRow(infoBox, definition.field)) continue;
         const row = this._buildSchemaFieldRow(infoBox, item, definition, !!infoBox.editable);
         if (!row) continue;
         table.appendChild(row);
         this._hideSchemaBaseFieldRow(infoBox, item, definition);
       }
-      this._applySchemaSequence(infoBox, { markInitialized: false });
     }
     _cleanupRegisteredSchemaInfoRows(infoBox) {
       this._removeSchemaFieldRows(infoBox);
@@ -4996,8 +5016,10 @@ ${mlzBlock}` : mlzBlock;
       const sequence = this.schemaConfig?.getSequenceForItemType?.(this._getItemTypeName(infoBox?.item)) || [];
       const itemTypeRow = this._findItemTypeRow(infoBox);
       if (!itemTypeRow || itemTypeRow.parentNode !== table) return;
+      this._placeCreatorRowsAfterTitle(infoBox, table, itemTypeRow);
       const rows = [];
       for (const fieldName of sequence) {
+        if (this._isSchemaTitleField(fieldName)) continue;
         const row = this._findSchemaSequenceRow(infoBox, fieldName);
         if (!row || row.hidden || row.parentNode !== table) continue;
         const canMoveRow = shouldResequenceNativeRows || this._isPluginManagedInfoRow(row);
@@ -5005,13 +5027,14 @@ ${mlzBlock}` : mlzBlock;
         rows.push(row);
         this._appendSchemaCompanionRows(infoBox, table, rows, fieldName);
       }
-      let cursor = itemTypeRow.nextSibling;
+      let cursor = this._getSchemaSequenceStart(infoBox, table, itemTypeRow);
       for (const row of rows) {
         if (row !== cursor) {
           table.insertBefore(row, cursor);
         }
         cursor = row.nextSibling;
       }
+      this._placeCustomCourtAfterCourt(infoBox, table);
       if (markInitialized) {
         this._setSchemaSequenceState(infoBox);
       }
@@ -5053,7 +5076,7 @@ ${mlzBlock}` : mlzBlock;
           } catch (e) {
           }
         }
-      }, 150);
+      }, 300);
     }
     _watchSchemaSequence(infoBox) {
       const table = this._getInfoTable(infoBox);
@@ -5115,7 +5138,7 @@ ${mlzBlock}` : mlzBlock;
           } catch (e) {
           }
         }
-      }, 0);
+      }, 50);
     }
     _disconnectSchemaSequenceObserver() {
       if (this._schemaSequenceObserverTimer) {
@@ -5143,18 +5166,20 @@ ${mlzBlock}` : mlzBlock;
       const rows = [];
       const foundFields = [];
       for (const fieldName of sequence) {
+        if (this._isSchemaTitleField(fieldName)) continue;
         const row = this._findSchemaSequenceRow(infoBox, fieldName);
         if (!row || row.hidden || row.parentNode !== table || rows.includes(row)) continue;
         rows.push(row);
         foundFields.push(String(fieldName || "").trim());
         this._appendSchemaCompanionRows(infoBox, table, rows, fieldName, foundFields);
       }
-      const minimumUsefulRows = Math.min(4, sequence.length);
+      const minimumUsefulRows = Math.min(4, Math.max(1, sequence.length - 1));
       if (rows.length < minimumUsefulRows) {
         return { satisfied: false, reason: `too-few-rows:${rows.length}/${minimumUsefulRows}`, foundFields };
       }
       const itemTypeRow = this._findItemTypeRow(infoBox);
-      if (itemTypeRow?.parentNode === table && itemTypeRow.nextSibling !== rows[0]) {
+      const schemaStart = this._getSchemaSequenceStart(infoBox, table, itemTypeRow);
+      if (itemTypeRow?.parentNode === table && schemaStart !== rows[0]) {
         return { satisfied: false, reason: "first-row-not-after-item-type", foundFields };
       }
       for (let idx = 0; idx < rows.length - 1; idx += 1) {
@@ -5163,6 +5188,46 @@ ${mlzBlock}` : mlzBlock;
         }
       }
       return { satisfied: true, reason: "ok", foundFields };
+    }
+    _getSchemaSequenceStart(infoBox, table, itemTypeRow) {
+      if (!itemTypeRow || itemTypeRow.parentNode !== table) return null;
+      const titleRow = this._getSchemaTitleRow(infoBox);
+      let cursor = titleRow?.parentNode === table ? titleRow.nextSibling : itemTypeRow.nextSibling;
+      const creatorRows = new Set(this._getCreatorRows(infoBox));
+      while (cursor && creatorRows.has(cursor) && cursor.parentNode === table) {
+        cursor = cursor.nextSibling;
+      }
+      return cursor;
+    }
+    _isSchemaTitleField(fieldName) {
+      return ["title", "caseName", "nameOfAct", "subject"].includes(String(fieldName || "").trim());
+    }
+    _getSchemaTitleRow(infoBox) {
+      return this._findInfoFieldRow(infoBox, "title") || this._findInfoFieldRow(infoBox, "caseName") || this._findInfoFieldRow(infoBox, "nameOfAct") || this._findInfoFieldRow(infoBox, "subject");
+    }
+    _placeCreatorRowsAfterTitle(infoBox, table, itemTypeRow) {
+      const titleRow = this._getSchemaTitleRow(infoBox);
+      if (!titleRow || titleRow.parentNode !== table) return;
+      const creatorRows = this._getCreatorRows(infoBox).filter((row) => row.parentNode === table);
+      if (!creatorRows.length) return;
+      let cursor = titleRow.nextSibling;
+      for (const row of creatorRows) {
+        if (row === cursor) {
+          cursor = row.nextSibling;
+          continue;
+        }
+        table.insertBefore(row, cursor);
+        cursor = row.nextSibling;
+      }
+    }
+    _placeCustomCourtAfterCourt(infoBox, table) {
+      const courtRow = this._findInfoFieldRow(infoBox, "court");
+      const customCourtRow = infoBox?.querySelector?.(`#${this._customCourtRowID}`);
+      if (!courtRow || !customCourtRow) return;
+      if (courtRow.parentNode !== table || customCourtRow.parentNode !== table) return;
+      if (courtRow.nextSibling !== customCourtRow) {
+        table.insertBefore(customCourtRow, courtRow.nextSibling);
+      }
     }
     _findSchemaSequenceRow(infoBox, fieldName) {
       const field = String(fieldName || "").trim();

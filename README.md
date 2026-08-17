@@ -1,4 +1,4 @@
-# Citation-Phoenix (Zotero 8, 9, 10) - v0.8.3
+# Citation-Phoenix (Zotero 8, 9, 10) - v0.8.4
 
 Now multi-jurisdictional.
 
